@@ -51,7 +51,7 @@
   --gold: #C9A84C;
   --gold-light: #E8D48B;
   --gold-dark: #A8892E;
-  --background: oklch(0.99 0 0);
+  --background: oklch(0.97 0 0);
   --foreground: oklch(0.15 0.01 260);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.15 0.01 260);
@@ -161,14 +161,15 @@
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
 }
 .dark .glass-card {
   background: rgba(30, 30, 40, 0.6);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: none;
 }
 
 /* Gold gradient text */

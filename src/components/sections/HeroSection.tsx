@@ -104,7 +104,7 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1">
                 <Select value={filters.location} onValueChange={(v) => setFilters({ ...filters, location: v })}>
-                  <SelectTrigger className="bg-white/10 border-white/15 text-white placeholder:text-white/50 h-11">
+                  <SelectTrigger className="bg-white/10 border-white/15 text-white data-[placeholder]:text-white/80 [&>span]:text-white [&>svg]:text-white h-11">
                     <MapPin className="w-4 h-4 mr-2 text-[#C9A84C]" />
                     <SelectValue placeholder="Select Location" />
                   </SelectTrigger>
@@ -117,7 +117,7 @@ export default function HeroSection() {
               </div>
               <div className="flex-1">
                 <Select value={filters.bhk} onValueChange={(v) => setFilters({ ...filters, bhk: v })}>
-                  <SelectTrigger className="bg-white/10 border-white/15 text-white placeholder:text-white/50 h-11">
+                  <SelectTrigger className="bg-white/10 border-white/15 text-white data-[placeholder]:text-white/80 [&>span]:text-white [&>svg]:text-white h-11">
                     <Home className="w-4 h-4 mr-2 text-[#C9A84C]" />
                     <SelectValue placeholder="BHK Type" />
                   </SelectTrigger>
@@ -131,7 +131,7 @@ export default function HeroSection() {
               </div>
               <div className="flex-1">
                 <Select value={filters.budget} onValueChange={(v) => setFilters({ ...filters, budget: v })}>
-                  <SelectTrigger className="bg-white/10 border-white/15 text-white placeholder:text-white/50 h-11">
+                  <SelectTrigger className="bg-white/10 border-white/15 text-white data-[placeholder]:text-white/80 [&>span]:text-white [&>svg]:text-white h-11">
                     <IndianRupee className="w-4 h-4 mr-2 text-[#C9A84C]" />
                     <SelectValue placeholder="Budget Range" />
                   </SelectTrigger>
