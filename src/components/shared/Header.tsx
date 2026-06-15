@@ -6,18 +6,21 @@ import { useAppStore } from '@/lib/store'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetClose } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Menu, Sun, Moon, Phone, X, Crown } from 'lucide-react'
-import type { Page } from '@/lib/store'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
-const NAV_LINKS: { label: string; page: Page }[] = [
-  { label: 'Home', page: 'home' },
-  { label: 'Projects', page: 'projects' },
-  { label: 'About', page: 'about' },
-  { label: 'Testimonials', page: 'testimonials' },
-  { label: 'Contact', page: 'contact' },
+const NAV_LINKS = [
+  { label: 'Home', path: '/' },
+  { label: 'Projects', path: '/projects' },
+  { label: 'About', path: '/about' },
+  { label: 'Testimonials', path: '/testimonials' },
+  { label: 'EMI Calculator', path: '/emi-calculator' },
+  { label: 'Contact', path: '/contact' },
 ]
 
 export default function Header() {
-  const { currentPage, navigate, theme, toggleTheme } = useAppStore()
+  const { theme, toggleTheme } = useAppStore()
+  const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -26,11 +29,6 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  const handleNav = (page: Page) => {
-    navigate(page)
-    setMobileOpen(false)
-  }
 
   return (
     <motion.header
@@ -46,43 +44,47 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
-          <motion.button
-            onClick={() => handleNav('home')}
-            className="flex items-center gap-2 group cursor-pointer"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <img 
-              src="/logo.jpg" 
-              alt="New Era Reality Logo" 
-              className="h-10 sm:h-12 w-auto object-contain rounded-lg shadow-md shadow-[#C9A84C]/10" 
-            />
-          </motion.button>
+          <Link href="/" onClick={() => setMobileOpen(false)}>
+            <motion.div
+              className="flex items-center gap-2 group cursor-pointer"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <img 
+                src="/logo.jpg" 
+                alt="New Era Reality Logo" 
+                className="h-10 sm:h-12 w-auto object-contain rounded-lg shadow-md shadow-[#C9A84C]/10" 
+              />
+            </motion.div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.map((link) => (
-              <motion.button
-                key={link.page}
-                onClick={() => handleNav(link.page)}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-lg cursor-pointer ${
-                  currentPage === link.page
-                    ? 'text-[#C9A84C]'
-                    : 'text-foreground/70 hover:text-foreground'
-                }`}
-                whileHover={{ y: -1 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                {link.label}
-                {currentPage === link.page && (
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname === link.path
+              return (
+                <Link key={link.path} href={link.path}>
                   <motion.div
-                    layoutId="activeNav"
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[#C9A84C] rounded-full"
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </motion.button>
-            ))}
+                    className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-lg cursor-pointer ${
+                      isActive
+                        ? 'text-[#C9A84C]'
+                        : 'text-foreground/70 hover:text-foreground'
+                    }`}
+                    whileHover={{ y: -1 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    {link.label}
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNav"
+                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[#C9A84C] rounded-full"
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                      />
+                    )}
+                  </motion.div>
+                </Link>
+              )
+            })}
           </nav>
 
           {/* Right side actions */}
@@ -119,14 +121,15 @@ export default function Header() {
             </a>
 
             {/* Admin Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleNav('admin')}
-              className="hidden lg:flex text-xs text-muted-foreground hover:text-[#C9A84C]"
-            >
-              Admin
-            </Button>
+            <Link href="/admin">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hidden lg:flex text-xs text-muted-foreground hover:text-[#C9A84C]"
+              >
+                Admin
+              </Button>
+            </Link>
 
             {/* Mobile Menu */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -146,29 +149,33 @@ export default function Header() {
                     />
                   </div>
                   <div className="luxury-divider mb-4" />
-                  {NAV_LINKS.map((link, index) => (
-                    <motion.button
-                      key={link.page}
-                      initial={{ x: 50, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.05 }}
-                      onClick={() => handleNav(link.page)}
-                      className={`flex items-center px-4 py-3 rounded-lg text-left font-medium transition-all cursor-pointer ${
-                        currentPage === link.page
-                          ? 'bg-[#C9A84C]/10 text-[#C9A84C] border-l-2 border-[#C9A84C]'
-                          : 'text-foreground/70 hover:bg-muted hover:text-foreground'
-                      }`}
-                    >
-                      {link.label}
-                    </motion.button>
-                  ))}
+                  {NAV_LINKS.map((link, index) => {
+                    const isActive = pathname === link.path
+                    return (
+                      <Link key={link.path} href={link.path} onClick={() => setMobileOpen(false)}>
+                        <motion.div
+                          initial={{ x: 50, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          transition={{ delay: index * 0.05 }}
+                          className={`flex items-center px-4 py-3 rounded-lg text-left font-medium transition-all cursor-pointer ${
+                            isActive
+                              ? 'bg-[#C9A84C]/10 text-[#C9A84C] border-l-2 border-[#C9A84C]'
+                              : 'text-foreground/70 hover:bg-muted hover:text-foreground'
+                          }`}
+                        >
+                          {link.label}
+                        </motion.div>
+                      </Link>
+                    )
+                  })}
                   <div className="luxury-divider my-4" />
-                  <button
-                    onClick={() => handleNav('admin')}
-                    className="flex items-center px-4 py-3 rounded-lg text-left font-medium text-foreground/70 hover:bg-muted hover:text-foreground transition-all cursor-pointer"
-                  >
-                    Admin Dashboard
-                  </button>
+                  <Link href="/admin" onClick={() => setMobileOpen(false)}>
+                    <div
+                      className="flex items-center px-4 py-3 rounded-lg text-left font-medium text-foreground/70 hover:bg-muted hover:text-foreground transition-all cursor-pointer"
+                    >
+                      Admin Dashboard
+                    </div>
+                  </Link>
                   <div className="mt-4 px-4">
                     <a
                       href="https://wa.me/917021731962"

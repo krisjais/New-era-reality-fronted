@@ -2,13 +2,15 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/lib/store'
 import PropertyCard from '@/components/shared/PropertyCard'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
 
 export default function FeaturedProjects() {
-  const { navigate, properties } = useAppStore()
+  const { properties } = useAppStore()
+  const router = useRouter()
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
 
@@ -59,7 +61,7 @@ export default function FeaturedProjects() {
           className="text-center mt-10"
         >
           <Button
-            onClick={() => navigate('projects')}
+            onClick={() => router.push('/projects')}
             size="lg"
             className="btn-gold text-white font-semibold rounded-xl px-8"
           >

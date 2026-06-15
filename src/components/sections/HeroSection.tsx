@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { useAppStore } from '@/lib/store'
+import { useRouter } from 'next/navigation'
 import { SITE_STATS } from '@/lib/data'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -38,11 +38,11 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
 }
 
 export default function HeroSection() {
-  const { navigate } = useAppStore()
+  const router = useRouter()
   const [filters, setFilters] = useState({ location: '', bhk: '', budget: '' })
 
   const handleSearch = () => {
-    navigate('projects')
+    router.push('/projects')
   }
 
   return (
@@ -161,7 +161,7 @@ export default function HeroSection() {
             className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3"
           >
             <Button
-              onClick={() => navigate('projects')}
+              onClick={() => router.push('/projects')}
               size="lg"
               className="btn-gold px-8 text-white font-semibold rounded-xl"
             >

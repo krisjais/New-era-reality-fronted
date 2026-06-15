@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,7 +20,7 @@ import {
   LayoutDashboard, Building2, Users, MessageSquare, Bell, LogOut,
   Eye, EyeOff, Heart, Phone, Plus, Pencil, Trash2, Check, X, Loader2,
   Crown, TrendingUp, BarChart3, ArrowLeft, ChevronRight, MapPin, MessageCircle,
-  UploadCloud, ImageIcon
+  UploadCloud, ImageIcon, Sun, Moon
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,
@@ -55,7 +56,7 @@ const SIDEBAR_ITEMS = [
   { key: 'admin-notifications' as const, label: 'Notifications', icon: Bell, shortLabel: 'Alerts' },
 ]
 
-const CHART_COLORS = ['#C9A84C', '#B8941F', '#E8D48B', '#A8892E', '#D4AF37']
+const CHART_COLORS = ['#C9A84C', '#2563eb', '#60a5fa', '#1d4ed8', '#C9A84C']
 
 // Login Screen
 function AdminLogin() {
@@ -90,17 +91,17 @@ function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a0a12] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0a0a12] px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-[#13131a] rounded-2xl p-6 sm:p-8 w-full max-w-md border border-[#C9A84C]/10"
+        className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none rounded-2xl p-6 sm:p-8 w-full max-w-md border border-[#C9A84C]/10"
       >
         <div className="text-center mb-6">
-          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#C9A84C] to-[#B8941F] flex items-center justify-center mx-auto mb-3">
-            <Crown className="w-8 h-8 text-white" />
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#C9A84C] to-[#2563eb] flex items-center justify-center mx-auto mb-3">
+            <Crown className="w-8 h-8 text-gray-900 dark:text-white" />
           </div>
-          <h1 className="text-2xl font-bold font-[var(--font-playfair)] gold-text">Admin Login</h1>
+          <h1 className="text-2xl font-bold font-[var(--font-playfair)] text-[#C9A84C] dark:text-[#E8D48B]">Admin Login</h1>
           <p className="text-sm text-muted-foreground mt-1">New Era Reality Dashboard</p>
         </div>
         <form onSubmit={handleLogin} className="space-y-4">
@@ -118,7 +119,7 @@ function AdminLogin() {
             </div>
           </div>
           {error && <p className="text-sm text-red-500">{error}</p>}
-          <Button type="submit" disabled={loading} className="w-full btn-gold text-white font-semibold py-3">
+          <Button type="submit" disabled={loading} className="w-full bg-[#C9A84C] hover:bg-[#B8941F] text-white shadow-md shadow-[#C9A84C]/20 transition-all text-gray-900 dark:text-white font-semibold py-3">
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             {loading ? 'Signing in...' : 'Sign In'}
           </Button>
@@ -176,11 +177,23 @@ function DashboardOverview() {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl sm:text-2xl font-bold font-[var(--font-playfair)]">Dashboard Overview</h2>
-        <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
-          <span>{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-1">Analytics Overview,</h2>
+          <p className="text-xs sm:text-sm text-gray-500 uppercase tracking-wider font-medium">
+            {new Date().toLocaleDateString('en-US', { month: 'long', day: '2-digit' })} - {new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { day: '2-digit' })} ({new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })})
+          </p>
+        </div>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Button variant="outline" size="sm" className="bg-white dark:bg-[#13131a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300">
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
+            Sort By
+          </Button>
+          <Button variant="outline" size="sm" className="bg-white dark:bg-[#13131a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300">
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+            Filter By
+          </Button>
         </div>
       </div>
 
@@ -188,7 +201,7 @@ function DashboardOverview() {
       <motion.div 
         variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } }}
         initial="hidden" animate="show"
-        className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
+        className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
       >
         {[
           { label: 'Total Projects', value: stats.properties, icon: Building2 },
@@ -197,15 +210,18 @@ function DashboardOverview() {
           { label: 'Property Likes', value: stats.likes, icon: Heart },
         ].map((stat) => (
           <motion.div key={stat.label} variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}>
-            <Card className="bg-[#13131a] border-transparent hover:border-[#C9A84C]/20 transition-all cursor-pointer group hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(201,168,76,0.1)]">
-              <CardContent className="p-4 sm:p-5">
-                <div className="flex justify-between items-start mb-2 sm:mb-4">
-                  <p className="text-xs sm:text-sm font-medium text-gray-400">{stat.label}</p>
-                  <div className="w-8 h-8 rounded-full bg-[#1a1a24] flex items-center justify-center group-hover:bg-[#C9A84C]/10 transition-colors">
-                    <stat.icon className="w-4 h-4 text-gray-500 group-hover:text-[#C9A84C] transition-colors" />
+            <Card className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none border border-gray-100 dark:border-white/5 hover:border-[#C9A84C]/30 transition-all cursor-pointer group hover:-translate-y-1 hover:shadow-lg hover:shadow-[#C9A84C]/10 rounded-2xl overflow-hidden">
+              <CardContent className="p-5 sm:p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-[#1a1a24] flex items-center justify-center group-hover:bg-[#C9A84C] transition-colors duration-300">
+                    <stat.icon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
+                  </div>
+                  <div className="flex items-center gap-1 text-xs font-semibold text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-full">
+                    <TrendingUp className="w-3 h-3" /> +12%
                   </div>
                 </div>
-                <p className="text-2xl sm:text-4xl font-bold tracking-tight text-white group-hover:text-[#C9A84C] transition-colors">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{stat.label}</p>
+                <p className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
                   {stat.value.toLocaleString()}
                 </p>
               </CardContent>
@@ -222,8 +238,8 @@ function DashboardOverview() {
         className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6"
       >
         {/* Pie Chart - Takes 1 column */}
-        <Card className="bg-[#13131a] border-transparent lg:col-span-1">
-          <CardHeader className="pb-2 p-4 sm:p-5 border-b border-white/5">
+        <Card className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none border-transparent lg:col-span-1">
+          <CardHeader className="pb-2 p-4 sm:p-5 border-b border-gray-100 dark:border-white/5">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-[#C9A84C]" /> Leads by Type
             </CardTitle>
@@ -234,10 +250,10 @@ function DashboardOverview() {
                 <PieChart>
                   <Pie data={leadsByType} cx="50%" cy="50%" innerRadius={50} outerRadius={70} dataKey="value" stroke="none" paddingAngle={5}>
                     {leadsByType.map((_, index) => (
-                      <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                      <Cell key={index} fill={['#C9A84C', '#E8D48B', '#D4AF37', '#B8941F', '#A8892E'][index % 5]} />
                     ))}
                   </Pie>
-                  <Tooltip contentStyle={{ backgroundColor: '#13131a', border: '1px solid rgba(201,168,76,0.2)', borderRadius: '8px' }} itemStyle={{ color: '#fff' }} />
+                  <Tooltip contentStyle={{ backgroundColor: 'var(--tw-colors-white)', border: '1px solid #e5e7eb', borderRadius: '8px' }} itemStyle={{ color: '#111827' }} />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
@@ -246,8 +262,8 @@ function DashboardOverview() {
             {leadsByType.length > 0 && (
               <div className="flex flex-wrap justify-center gap-3 mt-4">
                 {leadsByType.map((l, i) => (
-                  <div key={l.name} className="flex items-center gap-1.5 text-xs text-gray-400">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} />
+                  <div key={l.name} className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: ['#C9A84C', '#E8D48B', '#D4AF37', '#B8941F', '#A8892E'][i % 5] }} />
                     {l.name}
                   </div>
                 ))}
@@ -257,8 +273,8 @@ function DashboardOverview() {
         </Card>
 
         {/* Bar Chart - Takes 2 columns */}
-        <Card className="bg-[#13131a] border-transparent lg:col-span-2">
-          <CardHeader className="pb-2 p-4 sm:p-5 border-b border-white/5">
+        <Card className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none border-transparent lg:col-span-2">
+          <CardHeader className="pb-2 p-4 sm:p-5 border-b border-gray-100 dark:border-white/5">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-[#C9A84C]" /> Leads Over Time
             </CardTitle>
@@ -270,12 +286,12 @@ function DashboardOverview() {
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
                   <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#888' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 11, fill: '#888' }} axisLine={false} tickLine={false} />
-                  <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#13131a', border: '1px solid rgba(201,168,76,0.2)', borderRadius: '8px' }} />
-                  <Bar dataKey="count" fill="url(#goldGradient)" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                  <Tooltip cursor={{ fill: 'rgba(201,168,76,0.05)' }} contentStyle={{ backgroundColor: 'var(--tw-colors-white)', border: '1px solid #e5e7eb', borderRadius: '8px' }} />
+                  <Bar dataKey="count" fill="url(#blueGradient)" radius={[4, 4, 0, 0]} maxBarSize={40} />
                   <defs>
-                    <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="#C9A84C" />
-                      <stop offset="100%" stopColor="#8A7331" />
+                      <stop offset="100%" stopColor="#E8D48B" />
                     </linearGradient>
                   </defs>
                 </BarChart>
@@ -295,16 +311,16 @@ function DashboardOverview() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
       >
-        <Card className="bg-[#13131a] border-transparent">
-          <CardHeader className="pb-2 p-4 sm:p-5 border-b border-white/5 flex flex-row items-center justify-between">
+        <Card className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none border-transparent">
+          <CardHeader className="pb-2 p-4 sm:p-5 border-b border-gray-100 dark:border-white/5 flex flex-row items-center justify-between">
             <CardTitle className="text-sm font-semibold">Recent Inquiries</CardTitle>
-            <Button variant="ghost" size="sm" className="h-8 text-xs text-[#C9A84C] hover:text-white hover:bg-[#C9A84C]/20">View All</Button>
+            <Button variant="ghost" size="sm" className="h-8 text-xs text-[#C9A84C] hover:text-gray-900 dark:text-white hover:bg-[#C9A84C]/20">View All</Button>
           </CardHeader>
           <CardContent className="p-0">
             {recentLeads.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">No inquiries yet</p>
             ) : (
-              <div className="divide-y divide-white/5">
+              <div className="divide-y divide-gray-100 dark:divide-white/5">
                 {recentLeads.map((lead, i) => (
                   <motion.div 
                     key={lead.id}
@@ -314,11 +330,11 @@ function DashboardOverview() {
                     className="flex items-center justify-between p-4 sm:px-5 hover:bg-white/[0.02] transition-colors group cursor-pointer"
                   >
                     <div className="flex items-center gap-3 sm:gap-4">
-                      <div className="w-10 h-10 rounded-full bg-[#1a1a24] border border-white/10 flex items-center justify-center shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#1a1a24] border border-gray-200 dark:border-white/10 flex items-center justify-center shrink-0">
                         <span className="text-[#C9A84C] font-semibold text-sm">{lead.name.charAt(0)}</span>
                       </div>
                       <div>
-                        <p className="font-medium text-sm text-white group-hover:text-[#C9A84C] transition-colors">{lead.name}</p>
+                        <p className="font-medium text-sm text-gray-900 dark:text-white group-hover:text-[#C9A84C] transition-colors">{lead.name}</p>
                         <div className="flex items-center gap-2 mt-0.5">
                           <span className="text-xs text-gray-500">{lead.phone}</span>
                           <span className="w-1 h-1 rounded-full bg-gray-700" />
@@ -328,11 +344,11 @@ function DashboardOverview() {
                     </div>
                     <div className="flex items-center gap-3 sm:gap-4">
                       <div className="hidden sm:flex flex-col items-end mr-4">
-                        <span className="text-xs text-gray-400">Type</span>
-                        <span className="text-sm font-medium text-gray-200">{lead.leadType}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">Type</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{lead.leadType}</span>
                       </div>
                       <Badge className={`px-2 py-0.5 rounded-full text-[10px] font-medium border-0 ${
-                        lead.status === 'new' ? 'bg-blue-500/10 text-blue-400' : 
+                        lead.status === 'new' ? 'bg-[#C9A84C]/10 text-[#E8D48B]' : 
                         lead.status === 'contacted' ? 'bg-amber-500/10 text-amber-400' : 
                         lead.status === 'converted' ? 'bg-[#C9A84C]/20 text-[#C9A84C] shadow-[0_0_10px_rgba(201,168,76,0.2)]' : 
                         'bg-red-500/10 text-red-400'
@@ -340,7 +356,7 @@ function DashboardOverview() {
                         {lead.status.charAt(0).toUpperCase() + lead.status.slice(1)}
                       </Badge>
                       <div className="hidden sm:flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-white/10 hover:text-white text-gray-400">
+                        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-white/10 hover:text-gray-900 dark:text-white text-gray-500 dark:text-gray-400">
                           <MessageCircle className="w-4 h-4" />
                         </Button>
                       </div>
@@ -407,7 +423,7 @@ function ProjectsManagement() {
         <h2 className="text-lg sm:text-2xl font-bold font-[var(--font-playfair)]">Projects</h2>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button className="btn-gold text-white text-xs sm:text-sm" onClick={() => { setIsNew(true); setEditProp({ id: '', name: '', propertyType: 'Apartment', bhk: '', priceLabel: '', city: 'Mumbai', location: '', status: 'active', views: 0, likes: 0, inquiries: 0, featured: false }) }}>
+            <Button className="bg-[#C9A84C] hover:bg-[#B8941F] text-white shadow-md shadow-[#C9A84C]/20 transition-all text-white text-xs sm:text-sm" onClick={() => { setIsNew(true); setEditProp({ id: '', name: '', propertyType: 'Apartment', bhk: '', priceLabel: '', city: 'Mumbai', location: '', status: 'active', views: 0, likes: 0, inquiries: 0, featured: false }) }}>
               <Plus className="w-4 h-4 mr-1" /> <span className="hidden sm:inline">Add Property</span><span className="sm:hidden">Add</span>
             </Button>
           </DialogTrigger>
@@ -423,7 +439,7 @@ function ProjectsManagement() {
       {/* Mobile: Card layout */}
       <div className="sm:hidden space-y-3">
         {properties.map((prop) => (
-          <div key={prop.id} className="bg-[#13131a] rounded-xl p-4 border border-transparent hover:border-[#C9A84C]/20 transition-all hover:-translate-y-0.5">
+          <div key={prop.id} className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none rounded-xl p-4 border border-transparent hover:border-[#C9A84C]/20 transition-all hover:-translate-y-0.5">
             <div className="flex items-start justify-between gap-2 mb-2">
               <div className="min-w-0 flex-1">
                 <h3 className="font-semibold text-sm truncate">{prop.name}</h3>
@@ -453,14 +469,14 @@ function ProjectsManagement() {
           </div>
         ))}
         {properties.length === 0 && (
-          <Card className="bg-[#13131a] border-transparent">
+          <Card className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none border-transparent">
             <CardContent className="py-8 text-center text-muted-foreground text-sm">No properties found</CardContent>
           </Card>
         )}
       </div>
 
       {/* Desktop: Table layout */}
-      <Card className="hidden sm:block bg-[#13131a] border-transparent">
+      <Card className="hidden sm:block bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none border-transparent">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
@@ -688,14 +704,14 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
         <Label className="text-xs sm:text-sm">Photos</Label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {images.map((url, idx) => (
-            <div key={idx} className="relative group rounded-md overflow-hidden bg-[#1a1a24] aspect-video border border-[#C9A84C]/20">
+            <div key={idx} className="relative group rounded-md overflow-hidden bg-gray-100 dark:bg-[#1a1a24] aspect-video border border-[#C9A84C]/20">
               <img src={url} alt={`Property ${idx}`} className="w-full h-full object-cover" />
               <button type="button" onClick={() => setImages(images.filter((_, i) => i !== idx))} className="absolute top-1 right-1 bg-red-500/80 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                <X className="w-3 h-3 text-white" />
+                <X className="w-3 h-3 text-gray-900 dark:text-white" />
               </button>
             </div>
           ))}
-          <label className="relative flex flex-col items-center justify-center rounded-md border border-dashed border-[#C9A84C]/40 bg-[#1a1a24]/50 aspect-video hover:bg-[#1a1a24] transition-colors cursor-pointer">
+          <label className="relative flex flex-col items-center justify-center rounded-md border border-dashed border-[#C9A84C]/40 bg-gray-100 dark:bg-[#1a1a24]/50 aspect-video hover:bg-gray-100 dark:bg-[#1a1a24] transition-colors cursor-pointer">
             {uploading ? <Loader2 className="w-6 h-6 animate-spin text-[#C9A84C]" /> : <UploadCloud className="w-6 h-6 text-[#C9A84C]" />}
             <span className="text-xs text-muted-foreground mt-2">{uploading ? 'Uploading...' : 'Add Photo'}</span>
             <input type="file" multiple accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
@@ -712,7 +728,7 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
               <Badge 
                 key={amenity} 
                 variant={isSelected ? "default" : "outline"} 
-                className={`cursor-pointer ${isSelected ? 'bg-[#C9A84C] text-white hover:bg-[#B8941F]' : 'hover:border-[#C9A84C]'}`}
+                className={`cursor-pointer ${isSelected ? 'bg-[#C9A84C] text-gray-900 dark:text-white hover:bg-[#2563eb]' : 'hover:border-[#C9A84C]'}`}
                 onClick={() => toggleAmenity(amenity)}
               >
                 {amenity}
@@ -720,7 +736,7 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
             );
           })}
           {amenities.filter(a => !PRESET_AMENITIES.includes(a)).map(amenity => (
-            <Badge key={amenity} className="cursor-pointer bg-[#C9A84C] text-white hover:bg-[#B8941F]" onClick={() => toggleAmenity(amenity)}>
+            <Badge key={amenity} className="cursor-pointer bg-[#C9A84C] text-gray-900 dark:text-white hover:bg-[#2563eb]" onClick={() => toggleAmenity(amenity)}>
               {amenity} <X className="w-3 h-3 ml-1" />
             </Badge>
           ))}
@@ -733,7 +749,7 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
 
       <div className="space-y-2"><Label className="text-xs sm:text-sm">Description</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} /></div>
       <div className="flex gap-3 pt-2">
-        <Button onClick={handleFormSave} className="btn-gold text-white">Save</Button>
+        <Button onClick={handleFormSave} className="bg-[#C9A84C] hover:bg-[#B8941F] text-white shadow-md shadow-[#C9A84C]/20 transition-all text-gray-900 dark:text-white">Save</Button>
         <Button variant="outline" onClick={onCancel}>Cancel</Button>
       </div>
     </div>
@@ -773,7 +789,7 @@ function LeadsManagement() {
       {/* Mobile: Card layout */}
       <div className="sm:hidden space-y-3">
         {leads.map((lead) => (
-          <div key={lead.id} className="bg-[#13131a] rounded-xl p-4 border border-transparent hover:border-[#C9A84C]/20 transition-all hover:-translate-y-0.5">
+          <div key={lead.id} className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none rounded-xl p-4 border border-transparent hover:border-[#C9A84C]/20 transition-all hover:-translate-y-0.5">
             <div className="flex items-start justify-between gap-2 mb-2">
               <div className="min-w-0 flex-1">
                 <h3 className="font-semibold text-sm">{lead.name}</h3>
@@ -814,14 +830,14 @@ function LeadsManagement() {
           </div>
         ))}
         {leads.length === 0 && (
-          <Card className="bg-[#13131a] border-transparent">
+          <Card className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none border-transparent">
             <CardContent className="py-8 text-center text-muted-foreground text-sm">No leads yet</CardContent>
           </Card>
         )}
       </div>
 
       {/* Desktop: Table layout */}
-      <Card className="hidden sm:block bg-[#13131a] border-transparent">
+      <Card className="hidden sm:block bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none border-transparent">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
@@ -933,7 +949,7 @@ function TestimonialsManagement() {
         <h2 className="text-lg sm:text-2xl font-bold font-[var(--font-playfair)]">Testimonials</h2>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button className="btn-gold text-white text-xs sm:text-sm" onClick={() => { setIsNew(true); setEditTest(null) }}>
+            <Button className="bg-[#C9A84C] hover:bg-[#B8941F] text-white shadow-md shadow-[#C9A84C]/20 transition-all text-white text-xs sm:text-sm" onClick={() => { setIsNew(true); setEditTest(null) }}>
               <Plus className="w-4 h-4 mr-1" /> <span className="hidden sm:inline">Add Testimonial</span><span className="sm:hidden">Add</span>
             </Button>
           </DialogTrigger>
@@ -949,7 +965,7 @@ function TestimonialsManagement() {
       {/* Mobile: Card layout */}
       <div className="sm:hidden space-y-3">
         {testimonials.map((t) => (
-          <div key={t.id} className="bg-[#13131a] rounded-xl p-4 border border-transparent hover:border-[#C9A84C]/20 transition-all hover:-translate-y-0.5">
+          <div key={t.id} className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none rounded-xl p-4 border border-transparent hover:border-[#C9A84C]/20 transition-all hover:-translate-y-0.5">
             <div className="flex items-start justify-between gap-2 mb-2">
               <div className="min-w-0 flex-1">
                 <h3 className="font-semibold text-sm">{t.clientName}</h3>
@@ -970,14 +986,14 @@ function TestimonialsManagement() {
           </div>
         ))}
         {testimonials.length === 0 && (
-          <Card className="bg-[#13131a] border-transparent">
+          <Card className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none border-transparent">
             <CardContent className="py-8 text-center text-muted-foreground text-sm">No testimonials yet</CardContent>
           </Card>
         )}
       </div>
 
       {/* Desktop: Table layout */}
-      <Card className="hidden sm:block bg-[#13131a] border-transparent">
+      <Card className="hidden sm:block bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none border-transparent">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
@@ -1064,7 +1080,7 @@ function TestimonialForm({ testimonial, onSave, onCancel }: { testimonial: Admin
         </Select>
       </div>
       <div className="flex gap-3 pt-2">
-        <Button onClick={() => onSave(form)} className="btn-gold text-white">Save</Button>
+        <Button onClick={() => onSave(form)} className="bg-[#C9A84C] hover:bg-[#B8941F] text-white shadow-md shadow-[#C9A84C]/20 transition-all text-gray-900 dark:text-white">Save</Button>
         <Button variant="outline" onClick={onCancel}>Cancel</Button>
       </div>
     </div>
@@ -1111,7 +1127,7 @@ function NotificationsPage() {
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <h2 className="text-lg sm:text-2xl font-bold font-[var(--font-playfair)]">Notifications</h2>
-          {unreadCount > 0 && <Badge className="bg-[#C9A84C] text-white text-[10px]">{unreadCount}</Badge>}
+          {unreadCount > 0 && <Badge className="bg-[#C9A84C] text-gray-900 dark:text-white text-[10px]">{unreadCount}</Badge>}
         </div>
         {unreadCount > 0 && (
           <Button variant="outline" size="sm" onClick={markAllRead} className="text-[10px] sm:text-xs h-7">
@@ -1122,7 +1138,7 @@ function NotificationsPage() {
 
       <div className="space-y-3">
         {notifications.length === 0 ? (
-          <Card className="bg-[#13131a] border-transparent">
+          <Card className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none border-transparent">
             <CardContent className="py-8 text-center text-muted-foreground text-sm">No notifications yet</CardContent>
           </Card>
         ) : (
@@ -1131,7 +1147,7 @@ function NotificationsPage() {
               key={n.id}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              className={`bg-[#13131a] rounded-xl p-3 sm:p-4 border transition-all ${
+              className={`bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none rounded-xl p-3 sm:p-4 border transition-all ${
                 n.isRead ? 'border-border/50 opacity-60' : 'border-[#C9A84C]/20'
               }`}
               onClick={() => !n.isRead && markRead(n.id)}
@@ -1158,7 +1174,7 @@ function NotificationsPage() {
                         </a>
                         <a
                           href={`tel:+91${n.phone.replace(/\D/g, '')}`}
-                          className="inline-flex items-center justify-center h-7 w-7 rounded-md bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition-colors"
+                          className="inline-flex items-center justify-center h-7 w-7 rounded-md bg-[#C9A84C]/20 text-[#E8D48B] hover:bg-[#C9A84C]/30 transition-colors"
                           title="Call"
                         >
                           <Phone className="w-3.5 h-3.5" />
@@ -1179,7 +1195,8 @@ function NotificationsPage() {
 
 // Main Admin Dashboard
 export default function AdminDashboard() {
-  const { currentPage, isAdminAuthenticated, setAdminAuth, navigate } = useAppStore()
+  const { currentPage, isAdminAuthenticated, setAdminAuth, navigate, theme, toggleTheme } = useAppStore()
+  const router = useRouter()
 
   if (!isAdminAuthenticated) {
     return <AdminLogin />
@@ -1197,41 +1214,45 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a12] pt-14 sm:pt-16 overflow-x-hidden">
-      <div className="flex">
+    <div className="h-screen bg-gray-50 dark:bg-[#0a0a12] overflow-hidden">
+      <div className="flex h-full">
         {/* Sidebar - Desktop only */}
-        <aside className="hidden lg:flex w-64 min-h-[calc(100vh-4rem)] border-r border-[#C9A84C]/10 bg-[#0f0f18] flex-col shrink-0">
-          <div className="p-4">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C9A84C] to-[#B8941F] flex items-center justify-center">
+        <aside className="hidden lg:flex w-64 h-full border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0f0f18] flex-col shrink-0">
+          <div className="p-6">
+            <div className="flex items-center gap-3 mb-8 cursor-pointer" onClick={() => router.push('/')}>
+              <div className="w-8 h-8 rounded-lg bg-[#C9A84C] flex items-center justify-center shadow-md shadow-[#C9A84C]/20">
                 <Crown className="w-4 h-4 text-white" />
               </div>
               <div>
-                <p className="text-sm font-bold gold-text">Admin Panel</p>
-                <p className="text-[10px] text-muted-foreground">New Era Reality</p>
+                <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Admin Panel</h1>
+                <p className="text-[10px] text-gray-500">New Era Reality</p>
               </div>
             </div>
-            <Separator className="opacity-30" />
+            
+            <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 mb-4 tracking-wider uppercase">Menu</p>
           </div>
-          <nav className="flex-1 px-3 space-y-1">
-            {SIDEBAR_ITEMS.map((item) => (
-              <button
-                key={item.key}
-                onClick={() => navigate(item.key)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
-                  currentPage === item.key
-                    ? 'bg-[#C9A84C] text-[#0a0a12] shadow-[0_0_15px_rgba(201,168,76,0.4)]'
-                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                }`}
-              >
-                <item.icon className={`w-4 h-4 ${currentPage === item.key ? 'text-[#0a0a12]' : ''}`} />
-                {item.label}
-              </button>
-            ))}
+          <nav className="flex-1 px-4 space-y-1.5">
+            {SIDEBAR_ITEMS.map((item) => {
+              const isActive = currentPage === item.key
+              return (
+                <button
+                  key={item.key}
+                  onClick={() => navigate(item.key)}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? 'bg-[#C9A84C] text-white shadow-md shadow-[#C9A84C]/20'
+                      : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  <item.icon className={`w-4 h-4 ${isActive ? 'text-white' : ''}`} />
+                  {item.label}
+                </button>
+              )
+            })}
           </nav>
           <div className="p-3 mt-auto border-t border-[#C9A84C]/10">
             <button
-              onClick={() => { setAdminAuth(false); navigate('home') }}
+              onClick={() => { setAdminAuth(false); router.push('/') }}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
@@ -1241,7 +1262,7 @@ export default function AdminDashboard() {
         </aside>
 
         {/* Mobile Bottom Navigation */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0f0f18]/95 backdrop-blur-md border-t border-[#C9A84C]/10 safe-area-pb">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-[#0f0f18]/95 backdrop-blur-md border-t border-[#C9A84C]/10 safe-area-pb">
           <div className="flex items-center justify-around px-1 py-1.5">
             {SIDEBAR_ITEMS.map((item) => (
               <button
@@ -1250,7 +1271,7 @@ export default function AdminDashboard() {
                 className={`flex flex-col items-center justify-center gap-0.5 px-2 py-1.5 rounded-lg min-w-[52px] transition-all cursor-pointer ${
                   currentPage === item.key
                     ? 'text-[#C9A84C] bg-[#C9A84C]/10'
-                    : 'text-gray-500 active:text-gray-300'
+                    : 'text-gray-500 active:text-gray-600 dark:text-gray-300'
                 }`}
               >
                 <item.icon className="w-[18px] h-[18px]" />
@@ -1261,24 +1282,50 @@ export default function AdminDashboard() {
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 min-w-0 w-full p-3 sm:p-6 lg:p-8 pb-24 lg:pb-8">
+        <main className="flex-1 h-screen overflow-y-auto min-w-0 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 bg-gray-50 dark:bg-[#0a0a12]">
           {/* Top Bar */}
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <Button variant="ghost" onClick={() => navigate('home')} className="text-muted-foreground text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3">
-              <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" /> Back to Site
-            </Button>
-            <div className="flex items-center gap-1 sm:gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
+          <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200 dark:border-gray-800">
+            {/* Search */}
+            <div className="hidden md:flex relative w-96">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </div>
+              <input 
+                type="text" 
+                placeholder="Use ⌘+S to Search a keyword..." 
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-[#13131a] text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C] transition-shadow text-gray-900 dark:text-white"
+              />
+            </div>
+
+            <div className="flex items-center gap-3 sm:gap-4 ml-auto">
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="w-9 h-9 rounded-full flex items-center justify-center border border-gray-200 dark:border-gray-800 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white bg-white dark:bg-[#13131a] transition-all"
+              >
+                {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
+
+              <button
                 onClick={() => navigate('admin-notifications')}
-                className="relative text-muted-foreground h-8 w-8 sm:h-9 sm:w-9 p-0"
+                className="relative w-9 h-9 rounded-full flex items-center justify-center border border-gray-200 dark:border-gray-800 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white bg-white dark:bg-[#13131a] transition-all"
               >
                 <Bell className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => { setAdminAuth(false); navigate('home') }} className="text-red-400 h-8 w-8 sm:h-9 sm:w-9 p-0">
-                <LogOut className="w-4 h-4" />
-              </Button>
+                <span className="absolute top-2 right-2.5 w-1.5 h-1.5 bg-red-500 rounded-full border border-white dark:border-[#13131a]"></span>
+              </button>
+              
+              <div className="w-px h-6 bg-gray-200 dark:bg-gray-800 mx-1"></div>
+
+              {/* Profile */}
+              <div className="flex items-center gap-3 cursor-pointer group">
+                <div className="w-9 h-9 rounded-full bg-[#C9A84C] flex items-center justify-center text-white font-semibold text-sm shadow-sm">
+                  A
+                </div>
+                <div className="hidden sm:block text-sm">
+                  <p className="font-semibold text-gray-900 dark:text-white group-hover:text-[#C9A84C] transition-colors">Admin Account</p>
+                  <p className="text-xs text-gray-500">New Era Reality</p>
+                </div>
+              </div>
             </div>
           </div>
           <AnimatePresence mode="wait">

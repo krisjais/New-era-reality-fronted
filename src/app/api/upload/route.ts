@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { v2 as cloudinary } from 'cloudinary';
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,16 +23,15 @@ export async function POST(request: NextRequest) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      // Create unique filename to prevent overwrites
-      const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-      const filename = `${uniqueSuffix}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-      const uploadDir = join(process.cwd(), 'public', 'uploads');
-      const filepath = join(uploadDir, filename);
+      // Convert buffer to base64 for Cloudinary upload
+      const base64Image = `data:${file.type};base64,${buffer.toString('base64')}`;
 
-      await writeFile(filepath, buffer);
-      
-      // Store the relative path to be served via public folder
-      uploadedUrls.push(`/uploads/${filename}`);
+      // Upload to Cloudinary
+      const uploadResult = await cloudinary.uploader.upload(base64Image, {
+        folder: 'new-era-reality',
+      });
+
+      uploadedUrls.push(uploadResult.secure_url);
     }
 
     return NextResponse.json({ urls: uploadedUrls });

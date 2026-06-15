@@ -1,23 +1,21 @@
 'use client'
 
-import { useAppStore } from '@/lib/store'
 import { Separator } from '@/components/ui/separator'
 import { MapPin, Phone, Mail, Clock, Instagram, Facebook, Twitter, Linkedin, Crown, Shield } from 'lucide-react'
-import type { Page } from '@/lib/store'
+import Link from 'next/link'
 
-const QUICK_LINKS: { label: string; page: Page }[] = [
-  { label: 'Home', page: 'home' },
-  { label: 'Projects', page: 'projects' },
-  { label: 'About Us', page: 'about' },
-  { label: 'Testimonials', page: 'testimonials' },
-  { label: 'Contact', page: 'contact' },
+const QUICK_LINKS = [
+  { label: 'Home', path: '/' },
+  { label: 'Projects', path: '/projects' },
+  { label: 'About Us', path: '/about' },
+  { label: 'Testimonials', path: '/testimonials' },
+  { label: 'EMI Calculator', path: '/emi-calculator' },
+  { label: 'Contact', path: '/contact' },
 ]
 
 const LOCATIONS = ['Chembur', 'Kurla East', 'Ghatkopar', 'Matunga', 'Panvel', 'Atgaon']
 
 export default function Footer() {
-  const { navigate } = useAppStore()
-
   return (
     <footer className="bg-[#0a0a12] text-gray-300 border-t border-[#C9A84C]/20">
       {/* Main Footer */}
@@ -47,13 +45,13 @@ export default function Footer() {
             <h4 className="text-[#C9A84C] font-semibold font-[var(--font-playfair)] text-lg mb-4">Quick Links</h4>
             <ul className="space-y-2.5">
               {QUICK_LINKS.map((link) => (
-                <li key={link.page}>
-                  <button
-                    onClick={() => navigate(link.page)}
-                    className="text-sm text-gray-400 hover:text-[#C9A84C] transition-colors cursor-pointer"
+                <li key={link.path}>
+                  <Link
+                    href={link.path}
+                    className="text-sm text-gray-400 hover:text-[#C9A84C] transition-colors cursor-pointer block"
                   >
                     {link.label}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -65,13 +63,13 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {LOCATIONS.map((loc) => (
                 <li key={loc}>
-                  <button
-                    onClick={() => navigate('projects')}
+                  <Link
+                    href="/projects"
                     className="flex items-center gap-2 text-sm text-gray-400 hover:text-[#C9A84C] transition-colors cursor-pointer"
                   >
                     <MapPin className="w-3 h-3" />
                     {loc}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>

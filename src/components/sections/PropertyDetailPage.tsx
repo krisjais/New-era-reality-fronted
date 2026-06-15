@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/lib/store'
 import type { PropertyData } from '@/lib/data'
 import LeadForm from '@/components/shared/LeadForm'
@@ -16,14 +17,20 @@ import {
   Calendar, User, CheckCircle2, ArrowLeft
 } from 'lucide-react'
 
-export default function PropertyDetailPage() {
-  const { selectedPropertyId, navigate, addToRecentlyViewed, likedProperties, toggleLike, properties } = useAppStore()
+interface PropertyDetailPageProps {
+  propertyId?: string;
+}
+
+export default function PropertyDetailPage({ propertyId }: PropertyDetailPageProps) {
+  const { selectedPropertyId, addToRecentlyViewed, likedProperties, toggleLike, properties } = useAppStore()
+  const router = useRouter()
   const [currentImage, setCurrentImage] = useState(0)
   const [showLeadForm, setShowLeadForm] = useState(false)
 
   const property = useMemo(() => {
-    return properties.find((p) => p.id === selectedPropertyId) || null
-  }, [selectedPropertyId, properties])
+    const idToUse = propertyId || selectedPropertyId
+    return properties.find((p) => p.id === idToUse) || null
+  }, [propertyId, selectedPropertyId, properties])
 
   // Track view
   useEffect(() => {
@@ -38,7 +45,7 @@ export default function PropertyDetailPage() {
         <div className="text-center">
           <h2 className="text-2xl font-bold font-[var(--font-playfair)]">Property Not Found</h2>
           <p className="text-muted-foreground mt-2">The property you&apos;re looking for doesn&apos;t exist.</p>
-          <Button onClick={() => navigate('projects')} className="btn-gold text-white mt-4">
+          <Button onClick={() => router.push('/projects')} className="btn-gold text-white mt-4">
             Browse Properties
           </Button>
         </div>
@@ -63,7 +70,7 @@ export default function PropertyDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-          <Button variant="ghost" onClick={() => navigate('projects')} className="mb-4 text-muted-foreground hover:text-foreground">
+          <Button variant="ghost" onClick={() => router.push('/projects')} className="mb-4 text-muted-foreground hover:text-foreground">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Projects
           </Button>

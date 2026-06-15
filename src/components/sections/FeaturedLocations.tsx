@@ -2,17 +2,17 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { useAppStore } from '@/lib/store'
+import { useRouter } from 'next/navigation'
 import { FEATURED_LOCATIONS } from '@/lib/data'
 import { MapPin, Building2 } from 'lucide-react'
 
 export default function FeaturedLocations() {
-  const { navigate } = useAppStore()
+  const router = useRouter()
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
 
   const handleLocationClick = (locationName: string) => {
-    navigate('projects')
+    router.push('/projects')
   }
 
   return (

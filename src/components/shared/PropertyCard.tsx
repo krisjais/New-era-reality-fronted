@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/lib/store'
 import type { PropertyData } from '@/lib/data'
 import { Badge } from '@/components/ui/badge'
@@ -13,14 +14,15 @@ interface PropertyCardProps {
 }
 
 export default function PropertyCard({ property }: PropertyCardProps) {
-  const { navigate, toggleLike, toggleCompare, likedProperties, compareList, addToRecentlyViewed } = useAppStore()
+  const { toggleLike, toggleCompare, likedProperties, compareList, addToRecentlyViewed } = useAppStore()
+  const router = useRouter()
   const [currentImage, setCurrentImage] = useState(0)
   const isLiked = likedProperties.includes(property.id)
   const isComparing = compareList.includes(property.id)
 
   const handleClick = () => {
     addToRecentlyViewed(property.id)
-    navigate('property', property.id)
+    router.push(`/property/${property.id}`)
   }
 
   const images = Array.isArray(property.images) ? property.images : []
