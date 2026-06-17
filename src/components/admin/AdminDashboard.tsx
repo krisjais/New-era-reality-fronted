@@ -72,7 +72,7 @@ function AdminLogin() {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/admin', {
+      const res = await fetch('https://new-era-reality-backend.onrender.com/api/admin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -141,7 +141,7 @@ function DashboardOverview() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [propRes, leadRes] = await Promise.all([fetch('/api/properties'), fetch('/api/leads')])
+        const [propRes, leadRes] = await Promise.all([fetch('https://new-era-reality-backend.onrender.com/api/properties'), fetch('https://new-era-reality-backend.onrender.com/api/leads')])
         const properties: AdminProperty[] = await propRes.json()
         const leads: AdminLead[] = await leadRes.json()
 
@@ -382,7 +382,7 @@ function ProjectsManagement() {
 
   const fetchProperties = useCallback(async () => {
     try {
-      const res = await fetch('/api/properties')
+      const res = await fetch('https://new-era-reality-backend.onrender.com/api/properties')
       const data = await res.json()
       setProperties(data)
     } catch (err) { console.error(err) }
@@ -403,7 +403,7 @@ function ProjectsManagement() {
   const handleSave = async (data: Record<string, unknown>) => {
     try {
       if (isNew) {
-        await fetch('/api/properties', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+        await fetch('https://new-era-reality-backend.onrender.com/api/properties', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
         toast.success('Property created')
       } else if (editProp) {
         await fetch(`/api/properties/${editProp.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
@@ -582,7 +582,7 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     formData.append('folder', folder);
     
     try {
-      const res = await fetch('/api/upload', { method: 'POST', body: formData });
+      const res = await fetch('https://new-era-reality-backend.onrender.com/api/upload', { method: 'POST', body: formData });
       if (res.ok) {
         const data = await res.json();
         setUrls(prev => [...prev, ...data.urls]);
@@ -823,7 +823,7 @@ function LeadsManagement() {
 
   const fetchLeads = useCallback(async () => {
     try {
-      const res = await fetch('/api/leads')
+      const res = await fetch('https://new-era-reality-backend.onrender.com/api/leads')
       const data = await res.json()
       setLeads(data)
     } catch (err) { console.error(err) }
@@ -970,7 +970,7 @@ function TestimonialsManagement() {
 
   const fetchTestimonials = useCallback(async () => {
     try {
-      const res = await fetch('/api/testimonials')
+      const res = await fetch('https://new-era-reality-backend.onrender.com/api/testimonials')
       const data = await res.json()
       setTestimonials(data)
     } catch (err) { console.error(err) }
@@ -982,10 +982,10 @@ function TestimonialsManagement() {
   const handleSave = async (data: Record<string, unknown>) => {
     try {
       if (isNew) {
-        await fetch('/api/testimonials', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, approved: true }) })
+        await fetch('https://new-era-reality-backend.onrender.com/api/testimonials', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, approved: true }) })
         toast.success('Testimonial created')
       } else if (editTest) {
-        await fetch('/api/testimonials', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, id: editTest.id, approved: true }) })
+        await fetch('https://new-era-reality-backend.onrender.com/api/testimonials', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, id: editTest.id, approved: true }) })
         toast.success('Testimonial updated')
       }
       setIsOpen(false)
@@ -1155,7 +1155,7 @@ function NotificationsPage() {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const res = await fetch('/api/notifications')
+      const res = await fetch('https://new-era-reality-backend.onrender.com/api/notifications')
       const data = await res.json()
       setNotifications(data.notifications || [])
       setUnreadCount(data.unreadCount || 0)

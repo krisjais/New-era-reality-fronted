@@ -61,7 +61,7 @@ export const useAppStore = create<AppState>((set) => ({
   clearCompare: () => set({ compareList: [] }),
   fetchProperties: async () => {
     try {
-      const res = await fetch('/api/properties')
+      const res = await fetch('https://new-era-reality-backend.onrender.com/api/properties')
       if (res.ok) {
         const data = await res.json()
         set({ properties: data, propertiesLoaded: true })
