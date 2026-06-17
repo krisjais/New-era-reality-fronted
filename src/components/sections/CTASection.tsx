@@ -26,7 +26,7 @@ export default function CTASection() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-[var(--font-playfair)] leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
               Ready to Find Your{' '}
               <span className="gold-text">Dream Home?</span>
             </h2>
@@ -63,7 +63,7 @@ export default function CTASection() {
             transition={{ delay: 0.2, duration: 0.6 }}
           >
             <div className="glass-card rounded-2xl p-6 sm:p-8 border border-[#C9A84C]/10">
-              <h3 className="text-xl font-bold font-[var(--font-playfair)] text-foreground mb-1">
+              <h3 className="text-xl font-bold text-foreground mb-1">
                 Request a Callback
               </h3>
               <p className="text-sm text-muted-foreground mb-6">

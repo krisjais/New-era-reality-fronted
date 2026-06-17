@@ -42,7 +42,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-[#C9A84C] font-semibold font-[var(--font-playfair)] text-lg mb-4">Quick Links</h4>
+            <h4 className="text-[#C9A84C] font-semibold text-lg mb-4">Quick Links</h4>
             <ul className="space-y-2.5">
               {QUICK_LINKS.map((link) => (
                 <li key={link.path}>
@@ -59,7 +59,7 @@ export default function Footer() {
 
           {/* Locations */}
           <div>
-            <h4 className="text-[#C9A84C] font-semibold font-[var(--font-playfair)] text-lg mb-4">Locations</h4>
+            <h4 className="text-[#C9A84C] font-semibold text-lg mb-4">Locations</h4>
             <ul className="space-y-2.5">
               {LOCATIONS.map((loc) => (
                 <li key={loc}>
@@ -77,7 +77,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-[#C9A84C] font-semibold font-[var(--font-playfair)] text-lg mb-4">Contact Us</h4>
+            <h4 className="text-[#C9A84C] font-semibold text-lg mb-4">Contact Us</h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm">
                 <MapPin className="w-4 h-4 text-[#C9A84C] shrink-0 mt-0.5" />

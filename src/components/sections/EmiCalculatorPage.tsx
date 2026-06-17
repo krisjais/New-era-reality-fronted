@@ -56,7 +56,7 @@ export default function EmiCalculatorPage() {
   return (
     <main className="min-h-screen pt-20 pb-16 bg-background">
       {/* Page Header */}
-      <div className="bg-[#0a0a12] border-b border-[#C9A84C]/20 py-12 sm:py-16 relative overflow-hidden">
+      <div className="bg-slate-50 dark:bg-[#0a0a12] border-b border-[#C9A84C]/20 py-12 sm:py-16 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-[#C9A84C]/10 to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
@@ -64,10 +64,10 @@ export default function EmiCalculatorPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-[var(--font-playfair)] text-white">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground">
               EMI <span className="gold-text">Calculator</span>
             </h1>
-            <p className="mt-4 text-gray-400 max-w-2xl text-sm sm:text-base">
+            <p className="mt-4 text-muted-foreground max-w-2xl text-sm sm:text-base">
               Plan your property purchase with ease. Calculate your Equated Monthly Installment (EMI) to understand your financial commitment before buying your dream home.
             </p>
           </motion.div>
@@ -87,7 +87,7 @@ export default function EmiCalculatorPage() {
               {/* Form Header */}
               <div className="bg-gradient-to-r from-[#C9A84C] to-[#B8941F] p-4 sm:p-5 flex items-center gap-3">
                 <Calculator className="w-5 h-5 text-white" />
-                <h2 className="text-xl font-bold text-white font-[var(--font-playfair)]">Calculate Your EMI</h2>
+                <h2 className="text-xl font-bold text-white ">Calculate Your EMI</h2>
               </div>
 
               {/* Form Body */}
@@ -195,7 +195,7 @@ export default function EmiCalculatorPage() {
               transition={{ delay: 0.4 }}
               className="glass-card rounded-2xl p-6 border border-[#C9A84C]/20"
             >
-              <h3 className="text-xl font-bold font-[var(--font-playfair)] text-[#C9A84C] mb-6 flex items-center gap-2">
+              <h3 className="text-xl font-bold text-[#C9A84C] mb-6 flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-[#C9A84C] rounded-full inline-block" />
                 Hot Properties
               </h3>

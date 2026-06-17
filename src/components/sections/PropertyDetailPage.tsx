@@ -43,7 +43,7 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
     return (
       <main className="min-h-screen pt-20 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold font-[var(--font-playfair)]">Property Not Found</h2>
+          <h2 className="text-2xl font-bold ">Property Not Found</h2>
           <p className="text-muted-foreground mt-2">The property you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={() => router.push('/projects')} className="btn-gold text-white mt-4">
             Browse Properties
@@ -147,7 +147,7 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
           <div className="lg:col-span-2 space-y-8">
             {/* Title */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-[var(--font-playfair)]">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold ">
                 {property.name}
               </h1>
               {property.tagline && (
@@ -155,7 +155,7 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
               )}
               <div className="flex items-center gap-2 mt-2 text-muted-foreground">
                 <MapPin className="w-4 h-4 text-[#C9A84C]" />
-                <span>{property.location}, {property.city}</span>
+                <span>{property.location}{property.city !== property.location ? `, ${property.city}` : ''}</span>
               </div>
               {property.builder && (
                 <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
@@ -254,10 +254,15 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
 
                 <TabsContent value="location" className="mt-4">
                   <div className="space-y-3">
-                    {property.address && (
+                    {property.address ? (
                       <div className="flex items-start gap-2">
                         <MapPin className="w-4 h-4 text-[#C9A84C] mt-0.5 shrink-0" />
                         <span className="text-sm">{property.address}</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-start gap-2">
+                        <MapPin className="w-4 h-4 text-[#C9A84C] mt-0.5 shrink-0" />
+                        <span className="text-sm">{property.location}{property.city !== property.location ? `, ${property.city}` : ''}</span>
                       </div>
                     )}
                     <h4 className="font-semibold mt-4">Nearby Landmarks</h4>
@@ -302,7 +307,7 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
             >
               <div className="mb-4">
                 <span className="text-sm text-muted-foreground">Starting from</span>
-                <p className="text-2xl sm:text-3xl font-bold gold-text font-[var(--font-playfair)]">
+                <p className="text-2xl sm:text-3xl font-bold gold-text ">
                   {property.priceLabel}
                 </p>
                 {property.pricePerSqft && (
@@ -370,7 +375,7 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
             className="mt-16"
           >
-            <h2 className="text-2xl font-bold font-[var(--font-playfair)] mb-6">
+            <h2 className="text-2xl font-bold mb-6">
               Similar <span className="gold-text">Properties</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -67,7 +67,7 @@ export default function StatsSection() {
               <div className="w-14 h-14 rounded-xl bg-[#C9A84C]/10 flex items-center justify-center mx-auto mb-3">
                 <stat.icon className="w-7 h-7 text-[#C9A84C]" />
               </div>
-              <div className="text-3xl sm:text-4xl font-bold gold-text font-[var(--font-playfair)]">
+              <div className="text-3xl sm:text-4xl font-bold gold-text ">
                 <Counter target={stat.value} suffix={stat.suffix} />
               </div>
               <p className="text-sm text-gray-400 mt-1">{stat.label}</p>

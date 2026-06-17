@@ -30,7 +30,7 @@ export default function FeaturedProjects() {
             <Sparkles className="w-4 h-4" />
             Handpicked for You
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold font-[var(--font-playfair)]">
+          <h2 className="text-3xl sm:text-4xl font-bold ">
             Featured <span className="gold-text">Projects</span>
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">

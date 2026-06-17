@@ -54,7 +54,7 @@ export default function ContactPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold font-[var(--font-playfair)]">
+          <h1 className="text-3xl sm:text-4xl font-bold ">
             Contact <span className="gold-text">Us</span>
           </h1>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
@@ -73,7 +73,7 @@ export default function ContactPage() {
           >
             <Card className="glass-card border-[#C9A84C]/10">
               <CardContent className="p-6">
-                <h3 className="font-bold font-[var(--font-playfair)] text-lg mb-4">Our Office</h3>
+                <h3 className="font-bold text-lg mb-4">Our Office</h3>
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <MapPin className="w-5 h-5 text-[#C9A84C] shrink-0 mt-0.5" />
@@ -150,7 +150,7 @@ export default function ContactPage() {
           >
             <Card className="glass-card border-[#C9A84C]/10">
               <CardContent className="p-6 sm:p-8">
-                <h3 className="text-xl font-bold font-[var(--font-playfair)] mb-1">Send Us a Message</h3>
+                <h3 className="text-xl font-bold mb-1">Send Us a Message</h3>
                 <p className="text-sm text-muted-foreground mb-6">
                   Fill out the form below and our team will get back to you within 24 hours.
                 </p>

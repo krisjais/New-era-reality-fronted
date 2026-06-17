@@ -25,7 +25,7 @@ export default function FeaturedLocations() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold font-[var(--font-playfair)]">
+          <h2 className="text-3xl sm:text-4xl font-bold ">
             Premium <span className="gold-text">Locations</span>
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
@@ -55,7 +55,7 @@ export default function FeaturedLocations() {
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <div className="flex items-center gap-2 mb-1">
                   <MapPin className="w-4 h-4 text-[#C9A84C]" />
-                  <h3 className="text-lg font-bold text-white font-[var(--font-playfair)]">{location.name}</h3>
+                  <h3 className="text-lg font-bold text-white ">{location.name}</h3>
                 </div>
                 <p className="text-sm text-gray-300">{location.city}</p>
                 <div className="flex items-center gap-1.5 mt-2">

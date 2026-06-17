@@ -7,14 +7,14 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import {
   Shield, Users, Target, Eye, Award, Building2, MapPin, Phone,
-  CheckCircle2, Crown, TrendingUp, Heart
+  CheckCircle2, Crown, TrendingUp, Heart, Compass, Lightbulb
 } from 'lucide-react'
 
 export default function AboutPage() {
   return (
     <main className="min-h-screen pt-20 pb-16">
       {/* Hero */}
-      <section className="relative py-16 sm:py-24 bg-gradient-to-br from-[#0a0a12] via-[#151520] to-[#0a0a12] overflow-hidden">
+      <section className="relative py-16 sm:py-24 bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-[#0a0a12] dark:via-[#151520] dark:to-[#0a0a12] overflow-hidden">
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#C9A84C] rounded-full blur-[150px]" />
         </div>
@@ -23,10 +23,10 @@ export default function AboutPage() {
             <Badge className="bg-[#C9A84C]/10 text-[#C9A84C] border-[#C9A84C]/20 mb-4">
               <Shield className="w-3 h-3 mr-1" /> RERA Registered Consultant
             </Badge>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-[var(--font-playfair)]">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold ">
               About <span className="gold-text">New Era Reality</span>
             </h1>
-            <p className="mt-4 text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               A trusted name in Mumbai&apos;s real estate landscape, we are committed to helping you find
               not just a property, but a place you can truly call home.
             </p>
@@ -44,7 +44,7 @@ export default function AboutPage() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold font-[var(--font-playfair)] mb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4">
                 Our <span className="gold-text">Story</span>
               </h2>
               <div className="luxury-divider max-w-24 mb-6" />
@@ -70,7 +70,7 @@ export default function AboutPage() {
               <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-[#C9A84C]/20 to-[#C9A84C]/5 border border-[#C9A84C]/20 flex items-center justify-center">
                 <div className="text-center">
                   <Crown className="w-16 h-16 text-[#C9A84C] mx-auto mb-4" />
-                  <p className="text-3xl font-bold font-[var(--font-playfair)] gold-text">Since 2023</p>
+                  <p className="text-3xl font-bold gold-text">Since 2023</p>
                   <p className="text-muted-foreground mt-2">Building Trust, Delivering Dreams</p>
                 </div>
               </div>
@@ -91,9 +91,9 @@ export default function AboutPage() {
             <Card className="glass-card border-[#C9A84C]/10">
               <CardContent className="p-6 sm:p-8">
                 <div className="w-12 h-12 rounded-xl bg-[#C9A84C]/10 flex items-center justify-center mb-4">
-                  <Target className="w-6 h-6 text-[#C9A84C]" />
+                  <Compass className="w-6 h-6 text-[#C9A84C]" />
                 </div>
-                <h3 className="text-xl font-bold font-[var(--font-playfair)] mb-3">Our Mission</h3>
+                <h3 className="text-xl font-bold mb-3">Our Mission</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   To simplify the home-buying journey by providing expert guidance, transparent processes,
                   and personalized property solutions. We are dedicated to helping every client find their
@@ -104,9 +104,9 @@ export default function AboutPage() {
             <Card className="glass-card border-[#C9A84C]/10">
               <CardContent className="p-6 sm:p-8">
                 <div className="w-12 h-12 rounded-xl bg-[#C9A84C]/10 flex items-center justify-center mb-4">
-                  <Eye className="w-6 h-6 text-[#C9A84C]" />
+                  <Lightbulb className="w-6 h-6 text-[#C9A84C]" />
                 </div>
-                <h3 className="text-xl font-bold font-[var(--font-playfair)] mb-3">Our Vision</h3>
+                <h3 className="text-xl font-bold mb-3">Our Vision</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   To become the most trusted and preferred real estate consultancy in the Mumbai Metropolitan
                   Region, known for our unwavering commitment to client satisfaction, market expertise, and
@@ -127,14 +127,14 @@ export default function AboutPage() {
           className="py-16"
         >
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold font-[var(--font-playfair)] mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">
               Meet Our <span className="gold-text">Founder</span>
             </h2>
             <div className="luxury-divider max-w-24 mx-auto mb-8" />
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#C9A84C] to-[#B8941F] flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl font-bold text-white font-[var(--font-playfair)]">RK</span>
+              <span className="text-3xl font-bold text-white ">RK</span>
             </div>
-            <h3 className="text-xl font-bold font-[var(--font-playfair)]">Rohit Kumar</h3>
+            <h3 className="text-xl font-bold ">Rohit Kumar</h3>
             <p className="text-[#C9A84C] font-medium mb-4">Founder & Lead Consultant</p>
             <p className="text-muted-foreground leading-relaxed">
               With extensive experience in Mumbai&apos;s real estate market, Rohit Kumar founded New Era Reality
@@ -156,7 +156,7 @@ export default function AboutPage() {
           transition={{ delay: 0.4 }}
           className="py-16"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold font-[var(--font-playfair)] text-center mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4">
             Our <span className="gold-text">Achievements</span>
           </h2>
           <div className="luxury-divider max-w-24 mx-auto mb-8" />
@@ -169,7 +169,7 @@ export default function AboutPage() {
             ].map((stat) => (
               <div key={stat.label} className="text-center glass-card rounded-xl p-5 border border-[#C9A84C]/10">
                 <stat.icon className="w-7 h-7 text-[#C9A84C] mx-auto mb-3" />
-                <p className="text-2xl font-bold gold-text font-[var(--font-playfair)]">{stat.value}</p>
+                <p className="text-2xl font-bold gold-text ">{stat.value}</p>
                 <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
               </div>
             ))}
@@ -192,7 +192,7 @@ export default function AboutPage() {
                 <div className="flex items-center gap-3 mb-4">
                   <Shield className="w-8 h-8 text-[#C9A84C]" />
                   <div>
-                    <h3 className="text-xl font-bold font-[var(--font-playfair)]">RERA Registration</h3>
+                    <h3 className="text-xl font-bold ">RERA Registration</h3>
                     <p className="text-[#C9A84C] font-medium text-sm">Fully Compliant</p>
                   </div>
                 </div>
@@ -211,7 +211,7 @@ export default function AboutPage() {
             {/* Services */}
             <Card className="glass-card border-[#C9A84C]/10">
               <CardContent className="p-6 sm:p-8">
-                <h3 className="text-xl font-bold font-[var(--font-playfair)] mb-4">Our Services</h3>
+                <h3 className="text-xl font-bold mb-4">Our Services</h3>
                 <div className="space-y-3">
                   {[
                     'Real Estate Agent — Buying, selling & renting properties',

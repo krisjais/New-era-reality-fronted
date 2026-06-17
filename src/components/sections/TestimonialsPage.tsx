@@ -37,7 +37,7 @@ export default function TestimonialsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold font-[var(--font-playfair)]">
+          <h1 className="text-3xl sm:text-4xl font-bold ">
             Client <span className="gold-text">Testimonials</span>
           </h1>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
@@ -53,7 +53,7 @@ export default function TestimonialsPage() {
           transition={{ delay: 0.1 }}
           className="glass-card rounded-2xl p-6 sm:p-8 border border-[#C9A84C]/10 mb-8 max-w-xl mx-auto text-center"
         >
-          <div className="text-5xl font-bold gold-text font-[var(--font-playfair)]">{avgRating}</div>
+          <div className="text-5xl font-bold gold-text ">{avgRating}</div>
           <div className="flex justify-center mt-2">
             <StarRating rating={Math.round(parseFloat(avgRating))} />
           </div>

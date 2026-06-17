@@ -41,7 +41,7 @@ export default function WhyChooseUs() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold font-[var(--font-playfair)]">
+          <h2 className="text-3xl sm:text-4xl font-bold ">
             Why Choose <span className="gold-text">New Era Reality</span>
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
@@ -64,7 +64,7 @@ export default function WhyChooseUs() {
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#C9A84C]/20 to-[#C9A84C]/5 flex items-center justify-center mx-auto mb-4 group-hover:from-[#C9A84C]/30 group-hover:to-[#C9A84C]/10 transition-all">
                 <feature.icon className="w-7 h-7 text-[#C9A84C]" />
               </div>
-              <h3 className="font-bold font-[var(--font-playfair)] text-lg text-foreground mb-2">
+              <h3 className="font-bold text-lg text-foreground mb-2">
                 {feature.title}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">

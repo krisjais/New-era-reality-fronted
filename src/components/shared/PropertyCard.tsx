@@ -158,7 +158,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
       {/* Content Section */}
       <div className="p-4 sm:p-5">
         {/* Name & Builder */}
-        <h3 className="font-bold font-[var(--font-playfair)] text-lg text-foreground group-hover:text-[#C9A84C] transition-colors line-clamp-1">
+        <h3 className="font-bold text-lg text-foreground group-hover:text-[#C9A84C] transition-colors line-clamp-1">
           {property.name}
         </h3>
         {property.builder && (
@@ -166,9 +166,9 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         )}
 
         {/* Location */}
-        <div className="flex items-center gap-1.5 mt-2 text-muted-foreground">
-          <MapPin className="w-3.5 h-3.5 text-[#C9A84C] shrink-0" />
-          <span className="text-sm truncate">{property.location}, {property.city}</span>
+        <div className="flex items-center gap-1.5 text-muted-foreground mt-1 text-sm">
+          <MapPin className="w-3.5 h-3.5 text-[#C9A84C]" />
+          <span className="truncate">{property.location}{property.city !== property.location ? `, ${property.city}` : ''}</span>
         </div>
 
         {/* Badges Row */}

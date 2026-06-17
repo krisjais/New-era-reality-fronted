@@ -52,7 +52,7 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold font-[var(--font-playfair)]">
+          <h2 className="text-3xl sm:text-4xl font-bold ">
             What Our <span className="gold-text">Clients Say</span>
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">

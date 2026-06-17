@@ -101,7 +101,7 @@ function AdminLogin() {
           <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#C9A84C] to-[#2563eb] flex items-center justify-center mx-auto mb-3">
             <Crown className="w-8 h-8 text-gray-900 dark:text-white" />
           </div>
-          <h1 className="text-2xl font-bold font-[var(--font-playfair)] text-[#C9A84C] dark:text-[#E8D48B]">Admin Login</h1>
+          <h1 className="text-2xl font-bold text-[#C9A84C] dark:text-[#E8D48B]">Admin Login</h1>
           <p className="text-sm text-muted-foreground mt-1">New Era Reality Dashboard</p>
         </div>
         <form onSubmit={handleLogin} className="space-y-4">
@@ -420,7 +420,7 @@ function ProjectsManagement() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-lg sm:text-2xl font-bold font-[var(--font-playfair)]">Projects</h2>
+        <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">Projects</h2>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button className="bg-[#C9A84C] hover:bg-[#B8941F] text-white shadow-md shadow-[#C9A84C]/20 transition-all text-white text-xs sm:text-sm" onClick={() => { setIsNew(true); setEditProp({ id: '', name: '', propertyType: 'Apartment', bhk: '', priceLabel: '', city: 'Mumbai', location: '', status: 'active', views: 0, likes: 0, inquiries: 0, featured: false }) }}>
@@ -556,29 +556,43 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
   };
 
   const [images, setImages] = useState<string[]>(getArray(property?.images));
+  const [floorPlans, setFloorPlans] = useState<string[]>(getArray(property?.floorPlans));
+  const [brochures, setBrochures] = useState<string[]>(getArray(property?.brochures));
+  const [thumbnailUrl, setThumbnailUrl] = useState((property as any)?.thumbnailUrl || '');
+  
   const [amenities, setAmenities] = useState<string[]>(getArray(property?.amenities));
   const [newAmenity, setNewAmenity] = useState('');
+  
   const [uploading, setUploading] = useState(false);
+  const [uploadingFloorPlans, setUploadingFloorPlans] = useState(false);
+  const [uploadingBrochures, setUploadingBrochures] = useState(false);
 
   const PRESET_AMENITIES = ["Swimming Pool", "Gymnasium", "Clubhouse", "24/7 Security", "Power Backup", "Parking", "Kids Play Area", "Jogging Track"];
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>, 
+    folder: string, 
+    setUrls: React.Dispatch<React.SetStateAction<string[]>>, 
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    setUploading(true);
+    setLoading(true);
     const formData = new FormData();
     Array.from(e.target.files).forEach(file => formData.append('files', file));
+    formData.append('folder', folder);
+    
     try {
       const res = await fetch('/api/upload', { method: 'POST', body: formData });
       if (res.ok) {
         const data = await res.json();
-        setImages([...images, ...data.urls]);
+        setUrls(prev => [...prev, ...data.urls]);
       } else {
         toast.error('Upload failed');
       }
     } catch {
       toast.error('Upload failed');
     } finally {
-      setUploading(false);
+      setLoading(false);
     }
   };
 
@@ -602,8 +616,13 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     payload.price = parseFloat(form.price) || 0;
     payload.areaSqft = form.areaSqft ? parseFloat(form.areaSqft) : null;
     payload.pricePerSqft = form.pricePerSqft ? parseFloat(form.pricePerSqft) : null;
-    payload.images = JSON.stringify(images);
-    payload.amenities = JSON.stringify(amenities);
+    
+    payload.images = images;
+    payload.floorPlans = floorPlans;
+    payload.brochures = brochures;
+    payload.thumbnailUrl = thumbnailUrl || (images.length > 0 ? images[0] : '');
+    payload.amenities = amenities;
+    
     if (!property?.slug) payload.slug = form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     onSave(payload);
   };
@@ -706,15 +725,56 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
           {images.map((url, idx) => (
             <div key={idx} className="relative group rounded-md overflow-hidden bg-gray-100 dark:bg-[#1a1a24] aspect-video border border-[#C9A84C]/20">
               <img src={url} alt={`Property ${idx}`} className="w-full h-full object-cover" />
-              <button type="button" onClick={() => setImages(images.filter((_, i) => i !== idx))} className="absolute top-1 right-1 bg-red-500/80 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                <X className="w-3 h-3 text-gray-900 dark:text-white" />
+              <button type="button" onClick={() => setImages(images.filter((_, i) => i !== idx))} className="absolute top-1 right-1 bg-red-500/80 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                <X className="w-3 h-3 text-white" />
+              </button>
+              <button type="button" onClick={() => setThumbnailUrl(url)} className={`absolute bottom-1 left-1 px-2 py-0.5 rounded text-[10px] font-medium transition-opacity z-10 ${thumbnailUrl === url ? 'bg-[#C9A84C] text-gray-900 opacity-100' : 'bg-black/50 text-white opacity-0 group-hover:opacity-100'}`}>
+                {thumbnailUrl === url ? 'Thumbnail' : 'Set Thumbnail'}
               </button>
             </div>
           ))}
           <label className="relative flex flex-col items-center justify-center rounded-md border border-dashed border-[#C9A84C]/40 bg-gray-100 dark:bg-[#1a1a24]/50 aspect-video hover:bg-gray-100 dark:bg-[#1a1a24] transition-colors cursor-pointer">
             {uploading ? <Loader2 className="w-6 h-6 animate-spin text-[#C9A84C]" /> : <UploadCloud className="w-6 h-6 text-[#C9A84C]" />}
             <span className="text-xs text-muted-foreground mt-2">{uploading ? 'Uploading...' : 'Add Photo'}</span>
-            <input type="file" multiple accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
+            <input type="file" multiple accept="image/*" onChange={(e) => handleFileUpload(e, 'new-era-reality/properties', setImages, setUploading)} className="hidden" disabled={uploading} />
+          </label>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label className="text-xs sm:text-sm">Floor Plans</Label>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {floorPlans.map((url, idx) => (
+            <div key={idx} className="relative group rounded-md overflow-hidden bg-gray-100 dark:bg-[#1a1a24] aspect-video border border-[#C9A84C]/20">
+              <img src={url} alt={`Floor Plan ${idx}`} className="w-full h-full object-contain bg-white" />
+              <button type="button" onClick={() => setFloorPlans(floorPlans.filter((_, i) => i !== idx))} className="absolute top-1 right-1 bg-red-500/80 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                <X className="w-3 h-3 text-white" />
+              </button>
+            </div>
+          ))}
+          <label className="relative flex flex-col items-center justify-center rounded-md border border-dashed border-[#C9A84C]/40 bg-gray-100 dark:bg-[#1a1a24]/50 aspect-video hover:bg-gray-100 dark:bg-[#1a1a24] transition-colors cursor-pointer">
+            {uploadingFloorPlans ? <Loader2 className="w-6 h-6 animate-spin text-[#C9A84C]" /> : <UploadCloud className="w-6 h-6 text-[#C9A84C]" />}
+            <span className="text-xs text-muted-foreground mt-2">{uploadingFloorPlans ? 'Uploading...' : 'Add Floor Plan'}</span>
+            <input type="file" multiple accept="image/*" onChange={(e) => handleFileUpload(e, 'new-era-reality/floor-plans', setFloorPlans, setUploadingFloorPlans)} className="hidden" disabled={uploadingFloorPlans} />
+          </label>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label className="text-xs sm:text-sm">Brochures (PDF or Image)</Label>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {brochures.map((url, idx) => (
+            <div key={idx} className="relative group rounded-md flex items-center justify-center bg-gray-100 dark:bg-[#1a1a24] aspect-video border border-[#C9A84C]/20 p-2">
+              <span className="text-xs truncate break-all max-w-[80%] text-center text-[#C9A84C]">Brochure {idx + 1}</span>
+              <button type="button" onClick={() => setBrochures(brochures.filter((_, i) => i !== idx))} className="absolute top-1 right-1 bg-red-500/80 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                <X className="w-3 h-3 text-white" />
+              </button>
+            </div>
+          ))}
+          <label className="relative flex flex-col items-center justify-center rounded-md border border-dashed border-[#C9A84C]/40 bg-gray-100 dark:bg-[#1a1a24]/50 aspect-video hover:bg-gray-100 dark:bg-[#1a1a24] transition-colors cursor-pointer">
+            {uploadingBrochures ? <Loader2 className="w-6 h-6 animate-spin text-[#C9A84C]" /> : <UploadCloud className="w-6 h-6 text-[#C9A84C]" />}
+            <span className="text-xs text-muted-foreground mt-2">{uploadingBrochures ? 'Uploading...' : 'Add Brochure'}</span>
+            <input type="file" multiple accept="*/*" onChange={(e) => handleFileUpload(e, 'new-era-reality/brochures', setBrochures, setUploadingBrochures)} className="hidden" disabled={uploadingBrochures} />
           </label>
         </div>
       </div>
@@ -784,7 +844,7 @@ function LeadsManagement() {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <h2 className="text-lg sm:text-2xl font-bold font-[var(--font-playfair)]">Leads Management</h2>
+      <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">Leads Management</h2>
 
       {/* Mobile: Card layout */}
       <div className="sm:hidden space-y-3">
@@ -946,7 +1006,7 @@ function TestimonialsManagement() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-lg sm:text-2xl font-bold font-[var(--font-playfair)]">Testimonials</h2>
+        <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">Testimonials</h2>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button className="bg-[#C9A84C] hover:bg-[#B8941F] text-white shadow-md shadow-[#C9A84C]/20 transition-all text-white text-xs sm:text-sm" onClick={() => { setIsNew(true); setEditTest(null) }}>
@@ -1126,7 +1186,7 @@ function NotificationsPage() {
     <div className="space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg sm:text-2xl font-bold font-[var(--font-playfair)]">Notifications</h2>
+          <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">Notifications</h2>
           {unreadCount > 0 && <Badge className="bg-[#C9A84C] text-gray-900 dark:text-white text-[10px]">{unreadCount}</Badge>}
         </div>
         {unreadCount > 0 && (
