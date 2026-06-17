@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
       fallback: [
         {
           source: '/api/:path*',
-          destination: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/:path*` : 'http://localhost:5001/api/:path*',
+          destination: process.env.NODE_ENV === 'production' ? 'https://new-era-reality-backend.onrender.com/api/:path*' : 'http://localhost:5001/api/:path*',
         },
       ],
     }
