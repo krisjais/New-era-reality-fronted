@@ -26,7 +26,7 @@ export default function CTASection() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-white">
               Ready to Find Your{' '}
               <span className="gold-text">Dream Home?</span>
             </h2>

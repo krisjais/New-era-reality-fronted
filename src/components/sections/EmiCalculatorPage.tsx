@@ -96,10 +96,11 @@ export default function EmiCalculatorPage() {
                   <Label className="text-sm font-medium text-gray-300 sm:text-right pr-4">Loan Amount (Rs.)</Label>
                   <div className="sm:col-span-2">
                     <Input
-                      type="number"
+                      type="text"
+                      inputMode="numeric"
                       placeholder="e.g. 5000000"
                       value={principal}
-                      onChange={(e) => setPrincipal(e.target.value)}
+                      onChange={(e) => setPrincipal(e.target.value.replace(/[^0-9.]/g, ''))}
                       className="bg-white/5 border-gray-700 text-white focus:border-[#C9A84C]"
                     />
                   </div>
@@ -109,11 +110,11 @@ export default function EmiCalculatorPage() {
                   <Label className="text-sm font-medium text-gray-300 sm:text-right pr-4">Interest Rate (%)</Label>
                   <div className="sm:col-span-2">
                     <Input
-                      type="number"
-                      step="0.1"
+                      type="text"
+                      inputMode="decimal"
                       placeholder="e.g. 8.5"
                       value={rate}
-                      onChange={(e) => setRate(e.target.value)}
+                      onChange={(e) => setRate(e.target.value.replace(/[^0-9.]/g, ''))}
                       className="bg-white/5 border-gray-700 text-white focus:border-[#C9A84C]"
                     />
                   </div>
@@ -123,10 +124,11 @@ export default function EmiCalculatorPage() {
                   <Label className="text-sm font-medium text-gray-300 sm:text-right pr-4">Loan Period (Yrs)</Label>
                   <div className="sm:col-span-2">
                     <Input
-                      type="number"
+                      type="text"
+                      inputMode="numeric"
                       placeholder="e.g. 20"
                       value={years}
-                      onChange={(e) => setYears(e.target.value)}
+                      onChange={(e) => setYears(e.target.value.replace(/[^0-9.]/g, ''))}
                       className="bg-white/5 border-gray-700 text-white focus:border-[#C9A84C]"
                     />
                   </div>

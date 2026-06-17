@@ -20,7 +20,7 @@ import {
   LayoutDashboard, Building2, Users, MessageSquare, Bell, LogOut,
   Eye, EyeOff, Heart, Phone, Plus, Pencil, Trash2, Check, X, Loader2,
   Crown, TrendingUp, BarChart3, ArrowLeft, ChevronRight, MapPin, MessageCircle,
-  UploadCloud, ImageIcon, Sun, Moon
+  UploadCloud, ImageIcon, Sun, Moon, Menu
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,
@@ -72,7 +72,7 @@ function AdminLogin() {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch('https://new-era-reality-backend.onrender.com/api/admin', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/admin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -141,7 +141,7 @@ function DashboardOverview() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [propRes, leadRes] = await Promise.all([fetch('https://new-era-reality-backend.onrender.com/api/properties'), fetch('https://new-era-reality-backend.onrender.com/api/leads')])
+        const [propRes, leadRes] = await Promise.all([fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/properties`), fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/leads`)])
         const properties: AdminProperty[] = await propRes.json()
         const leads: AdminLead[] = await leadRes.json()
 
@@ -382,7 +382,7 @@ function ProjectsManagement() {
 
   const fetchProperties = useCallback(async () => {
     try {
-      const res = await fetch('https://new-era-reality-backend.onrender.com/api/properties')
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/properties`)
       const data = await res.json()
       setProperties(data)
     } catch (err) { console.error(err) }
@@ -393,20 +393,26 @@ function ProjectsManagement() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this property?')) return
+    setProperties(prev => prev.filter(p => p.id !== id))
     try {
-      await fetch(`/api/properties/${id}`, { method: 'DELETE' })
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/properties/${id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Failed')
       toast.success('Property deleted')
+    } catch { 
+      toast.error('Failed to delete')
       fetchProperties()
-    } catch { toast.error('Failed to delete') }
+    }
   }
 
   const handleSave = async (data: Record<string, unknown>) => {
     try {
       if (isNew) {
-        await fetch('https://new-era-reality-backend.onrender.com/api/properties', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/properties`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+        if (!res.ok) throw new Error('Failed')
         toast.success('Property created')
       } else if (editProp) {
-        await fetch(`/api/properties/${editProp.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/properties/${editProp.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+        if (!res.ok) throw new Error('Failed')
         toast.success('Property updated')
       }
       setIsOpen(false)
@@ -582,7 +588,7 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     formData.append('folder', folder);
     
     try {
-      const res = await fetch('https://new-era-reality-backend.onrender.com/api/upload', { method: 'POST', body: formData });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/upload`, { method: 'POST', body: formData });
       if (res.ok) {
         const data = await res.json();
         setUrls(prev => [...prev, ...data.urls]);
@@ -823,7 +829,7 @@ function LeadsManagement() {
 
   const fetchLeads = useCallback(async () => {
     try {
-      const res = await fetch('https://new-era-reality-backend.onrender.com/api/leads')
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/leads`)
       const data = await res.json()
       setLeads(data)
     } catch (err) { console.error(err) }
@@ -833,11 +839,15 @@ function LeadsManagement() {
   useEffect(() => { fetchLeads() }, [fetchLeads])
 
   const updateStatus = async (id: string, status: string) => {
+    setLeads(prev => prev.map(lead => lead.id === id ? { ...lead, status } : lead))
     try {
-      await fetch(`/api/leads/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) })
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/leads/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) })
+      if (!res.ok) throw new Error('Failed')
       toast.success('Lead status updated')
+    } catch { 
+      toast.error('Failed to update')
       fetchLeads()
-    } catch { toast.error('Failed to update') }
+    }
   }
 
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin text-[#C9A84C]" /></div>
@@ -970,7 +980,7 @@ function TestimonialsManagement() {
 
   const fetchTestimonials = useCallback(async () => {
     try {
-      const res = await fetch('https://new-era-reality-backend.onrender.com/api/testimonials')
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/testimonials`)
       const data = await res.json()
       setTestimonials(data)
     } catch (err) { console.error(err) }
@@ -982,10 +992,10 @@ function TestimonialsManagement() {
   const handleSave = async (data: Record<string, unknown>) => {
     try {
       if (isNew) {
-        await fetch('https://new-era-reality-backend.onrender.com/api/testimonials', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, approved: true }) })
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/testimonials`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, approved: true }) })
         toast.success('Testimonial created')
       } else if (editTest) {
-        await fetch('https://new-era-reality-backend.onrender.com/api/testimonials', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, id: editTest.id, approved: true }) })
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/testimonials`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, id: editTest.id, approved: true }) })
         toast.success('Testimonial updated')
       }
       setIsOpen(false)
@@ -1155,7 +1165,7 @@ function NotificationsPage() {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const res = await fetch('https://new-era-reality-backend.onrender.com/api/notifications')
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/notifications`)
       const data = await res.json()
       setNotifications(data.notifications || [])
       setUnreadCount(data.unreadCount || 0)
@@ -1166,18 +1176,29 @@ function NotificationsPage() {
   useEffect(() => { fetchNotifications() }, [fetchNotifications])
 
   const markRead = async (id: string) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n))
+    setUnreadCount(prev => Math.max(0, prev - 1))
     try {
-      await fetch(`/api/notifications/${id}`, { method: 'PUT' })
-      fetchNotifications()
-    } catch { toast.error('Failed to update') }
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/notifications/${id}`, { method: 'PUT' })
+      if (!res.ok) throw new Error('Failed')
+    } catch { 
+      toast.error('Failed to update')
+      fetchNotifications() 
+    }
   }
 
   const markAllRead = async () => {
-    for (const n of notifications.filter((n) => !n.isRead)) {
-      await fetch(`/api/notifications/${n.id}`, { method: 'PUT' })
+    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })))
+    setUnreadCount(0)
+    try {
+      for (const n of notifications.filter((n) => !n.isRead)) {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/notifications/${n.id}`, { method: 'PUT' })
+      }
+      toast.success('All marked as read')
+    } catch {
+      toast.error('Failed to update some notifications')
+      fetchNotifications()
     }
-    fetchNotifications()
-    toast.success('All marked as read')
   }
 
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin text-[#C9A84C]" /></div>
@@ -1257,6 +1278,7 @@ function NotificationsPage() {
 export default function AdminDashboard() {
   const { currentPage, isAdminAuthenticated, setAdminAuth, navigate, theme, toggleTheme } = useAppStore()
   const router = useRouter()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   if (!isAdminAuthenticated) {
     return <AdminLogin />
@@ -1280,9 +1302,7 @@ export default function AdminDashboard() {
         <aside className="hidden lg:flex w-64 h-full border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0f0f18] flex-col shrink-0">
           <div className="p-6">
             <div className="flex items-center gap-3 mb-8 cursor-pointer" onClick={() => router.push('/')}>
-              <div className="w-8 h-8 rounded-lg bg-[#C9A84C] flex items-center justify-center shadow-md shadow-[#C9A84C]/20">
-                <Crown className="w-4 h-4 text-white" />
-              </div>
+              <img src="/logo.jpg" alt="New Era Reality Logo" className="w-10 h-10 object-contain rounded-lg shadow-sm" />
               <div>
                 <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Admin Panel</h1>
                 <p className="text-[10px] text-gray-500">New Era Reality</p>
@@ -1321,32 +1341,86 @@ export default function AdminDashboard() {
           </div>
         </aside>
 
-        {/* Mobile Bottom Navigation */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-[#0f0f18]/95 backdrop-blur-md border-t border-[#C9A84C]/10 safe-area-pb">
-          <div className="flex items-center justify-around px-1 py-1.5">
-            {SIDEBAR_ITEMS.map((item) => (
-              <button
-                key={item.key}
-                onClick={() => navigate(item.key)}
-                className={`flex flex-col items-center justify-center gap-0.5 px-2 py-1.5 rounded-lg min-w-[52px] transition-all cursor-pointer ${
-                  currentPage === item.key
-                    ? 'text-[#C9A84C] bg-[#C9A84C]/10'
-                    : 'text-gray-500 active:text-gray-600 dark:text-gray-300'
-                }`}
+        {/* Mobile Sidebar Overlay */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+              />
+              <motion.aside
+                initial={{ x: '-100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '-100%' }}
+                transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
+                className="lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-[#0f0f18] border-r border-gray-200 dark:border-gray-800 flex flex-col shadow-xl"
               >
-                <item.icon className="w-[18px] h-[18px]" />
-                <span className="text-[9px] font-medium leading-tight">{item.shortLabel}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setIsMobileMenuOpen(false); router.push('/'); }}>
+                    <img src="/logo.jpg" alt="New Era Reality Logo" className="w-8 h-8 object-contain rounded-lg shadow-sm" />
+                    <div>
+                      <h1 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">Admin</h1>
+                      <p className="text-[9px] text-gray-500">New Era Reality</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setIsMobileMenuOpen(false)} className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto">
+                  {SIDEBAR_ITEMS.map((item) => {
+                    const isActive = currentPage === item.key
+                    return (
+                      <button
+                        key={item.key}
+                        onClick={() => { navigate(item.key); setIsMobileMenuOpen(false); }}
+                        className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                          isActive
+                            ? 'bg-[#C9A84C] text-white shadow-md shadow-[#C9A84C]/20'
+                            : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'
+                        }`}
+                      >
+                        <item.icon className={`w-4 h-4 ${isActive ? 'text-white' : ''}`} />
+                        {item.label}
+                      </button>
+                    )
+                  })}
+                </nav>
+                <div className="p-3 mt-auto border-t border-[#C9A84C]/10">
+                  <button
+                    onClick={() => { setAdminAuth(false); router.push('/') }}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Logout
+                  </button>
+                </div>
+              </motion.aside>
+            </>
+          )}
+        </AnimatePresence>
 
         {/* Main Content */}
-        <main className="flex-1 h-screen overflow-y-auto min-w-0 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 bg-gray-50 dark:bg-[#0a0a12]">
+        <main className="flex-1 h-screen overflow-y-auto min-w-0 p-4 sm:p-6 lg:p-8 pb-8 bg-gray-50 dark:bg-[#0a0a12]">
           {/* Top Bar */}
           <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200 dark:border-gray-800">
+            {/* Mobile Header Elements */}
+            <div className="flex lg:hidden items-center gap-3">
+              <button 
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="p-2 -ml-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+              <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-md object-contain" />
+            </div>
+
             {/* Search */}
-            <div className="hidden md:flex relative w-96">
+            <div className="hidden md:flex relative w-96 ml-4 lg:ml-0">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
               </div>

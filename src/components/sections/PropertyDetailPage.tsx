@@ -14,7 +14,10 @@ import { Separator } from '@/components/ui/separator'
 import {
   MapPin, Maximize, Building2, Clock, Phone, MessageCircle, Download,
   ChevronLeft, ChevronRight, Star, Shield, Layers, Home, IndianRupee,
-  Calendar, User, CheckCircle2, ArrowLeft
+  Calendar, User, CheckCircle2, ArrowLeft, Waves, Dumbbell, Baby, Footprints, 
+  Building, Zap, ShieldCheck, PhoneCall, TreePine, Gamepad2, Car, Cctv, 
+  Flower2, Activity, ArrowUpDown, CloudRain, Wrench, Compass, BellRing, 
+  Flame, Wifi
 } from 'lucide-react'
 
 interface PropertyDetailPageProps {
@@ -58,11 +61,31 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
     (p) => p.id !== property.id && (p.city === property.city || p.propertyType === property.propertyType)
   ).slice(0, 3)
 
-  const AMENITY_ICONS: Record<string, string> = {
-    'Swimming Pool': '🏊', 'Gymnasium': '🏋️', 'Children Play Area': '👶', 'Jogging Track': '🏃',
-    'Club House': ' clubhouse', 'Power Backup': '⚡', '24/7 Security': '🔒', 'Intercom': '📞',
-    'Landscaped Gardens': '🌿', 'Indoor Games': '🎯', 'Parking': '🅿️', 'Garden': '🌳',
-    'CCTV Surveillance': '📹', 'Spa': '💆', 'Tennis Court': '🎾', 'EV Charging': '🔌',
+  const getAmenityIcon = (amenity: string) => {
+    const name = amenity.toLowerCase()
+    if (name.includes('pool')) return <Waves className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('gym')) return <Dumbbell className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('play') || name.includes('kid') || name.includes('child')) return <Baby className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('jog') || name.includes('track')) return <Footprints className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('club')) return <Building className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('power') || name.includes('backup')) return <Zap className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('security') || name.includes('guard')) return <ShieldCheck className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('intercom')) return <PhoneCall className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('garden') || name.includes('park') || name.includes('landscape')) return <TreePine className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('game')) return <Gamepad2 className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('parking') || name.includes('car')) return <Car className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('cctv') || name.includes('camera')) return <Cctv className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('spa') || name.includes('massage')) return <Flower2 className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('tennis') || name.includes('sport')) return <Activity className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('ev') || name.includes('charging')) return <Zap className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('lift') || name.includes('elevator')) return <ArrowUpDown className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('rain') || name.includes('water')) return <CloudRain className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('maintenance')) return <Wrench className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('vastu')) return <Compass className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('alarm') || name.includes('fire')) return <BellRing className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('gas')) return <Flame className="w-8 h-8 text-muted-foreground mb-3" />
+    if (name.includes('wifi') || name.includes('internet')) return <Wifi className="w-8 h-8 text-muted-foreground mb-3" />
+    return <CheckCircle2 className="w-8 h-8 text-muted-foreground mb-3" />
   }
 
   return (
@@ -242,11 +265,11 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
                 </TabsContent>
 
                 <TabsContent value="amenities" className="mt-4">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     {Array.isArray(property.amenities) && property.amenities.map((amenity) => (
-                      <div key={amenity} className="flex items-center gap-2 p-3 rounded-lg bg-muted/30">
-                        <CheckCircle2 className="w-4 h-4 text-[#C9A84C] shrink-0" />
-                        <span className="text-sm">{amenity}</span>
+                      <div key={amenity} className="flex flex-col items-center justify-center p-6 rounded-xl bg-muted/20 border border-border/50 text-center hover:bg-muted/40 transition-colors">
+                        {getAmenityIcon(amenity)}
+                        <span className="text-sm font-medium text-foreground">{amenity}</span>
                       </div>
                     ))}
                   </div>

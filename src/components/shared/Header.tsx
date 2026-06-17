@@ -30,6 +30,8 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const isHeroTransparent = pathname === '/' && !scrolled
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -68,7 +70,9 @@ export default function Header() {
                     className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-lg cursor-pointer ${
                       isActive
                         ? 'text-[#C9A84C]'
-                        : 'text-foreground/70 hover:text-foreground'
+                        : isHeroTransparent
+                          ? 'text-white/80 hover:text-white'
+                          : 'text-foreground/70 hover:text-foreground'
                     }`}
                     whileHover={{ y: -1 }}
                     whileTap={{ scale: 0.97 }}
@@ -92,7 +96,11 @@ export default function Header() {
             {/* Theme Toggle */}
             <motion.button
               onClick={toggleTheme}
-              className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/10 transition-all cursor-pointer"
+              className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+                isHeroTransparent 
+                  ? 'text-white/80 hover:text-white hover:bg-white/10' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
               whileHover={{ rotate: 180 }}
               transition={{ duration: 0.3 }}
             >
@@ -125,7 +133,11 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden lg:flex text-xs text-muted-foreground hover:text-[#C9A84C]"
+                className={`hidden lg:flex text-xs ${
+                  isHeroTransparent
+                    ? 'text-white/80 hover:text-white hover:bg-white/10'
+                    : 'text-muted-foreground hover:text-[#C9A84C]'
+                }`}
               >
                 Admin
               </Button>
@@ -134,7 +146,7 @@ export default function Header() {
             {/* Mobile Menu */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="lg:hidden">
+                <Button variant="ghost" size="icon" className={`lg:hidden ${isHeroTransparent ? 'text-white hover:bg-white/10' : ''}`}>
                   <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>

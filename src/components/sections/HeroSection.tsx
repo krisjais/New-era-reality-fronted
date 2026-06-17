@@ -77,7 +77,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-white"
           >
             Find Your{' '}
             <span className="gold-shimmer">Dream Home</span>

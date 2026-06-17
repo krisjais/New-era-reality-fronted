@@ -582,7 +582,7 @@ export const SITE_STATS = {
 
 export const FEATURED_LOCATIONS = [
   { name: 'Chembur', city: 'Mumbai', count: 25, image: 'https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=600&h=400&fit=crop' },
-  { name: 'Kurla East', city: 'Mumbai', count: 30, image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop' },
+  { name: 'Kurla East', city: 'Mumbai', count: 30, image: 'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=600&h=400&fit=crop' },
   { name: 'Ghatkopar', city: 'Mumbai', count: 20, image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop' },
   { name: 'Matunga', city: 'Mumbai', count: 15, image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&h=400&fit=crop' },
   { name: 'Panvel', city: 'Navi Mumbai', count: 35, image: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600&h=400&fit=crop' },
