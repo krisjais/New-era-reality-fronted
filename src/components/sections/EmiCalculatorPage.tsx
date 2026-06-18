@@ -101,7 +101,7 @@ export default function EmiCalculatorPage() {
                       placeholder="e.g. 5000000"
                       value={principal}
                       onChange={(e) => setPrincipal(e.target.value.replace(/[^0-9.]/g, ''))}
-                      className="bg-white/5 border-gray-700 text-white focus:border-[#C9A84C]"
+                      className="bg-white/5 border-gray-700 text-gray-900 dark:text-white focus:border-[#C9A84C]"
                     />
                   </div>
                 </div>
@@ -115,7 +115,7 @@ export default function EmiCalculatorPage() {
                       placeholder="e.g. 8.5"
                       value={rate}
                       onChange={(e) => setRate(e.target.value.replace(/[^0-9.]/g, ''))}
-                      className="bg-white/5 border-gray-700 text-white focus:border-[#C9A84C]"
+                      className="bg-white/5 border-gray-700 text-gray-900 dark:text-white focus:border-[#C9A84C]"
                     />
                   </div>
                 </div>
@@ -129,7 +129,7 @@ export default function EmiCalculatorPage() {
                       placeholder="e.g. 20"
                       value={years}
                       onChange={(e) => setYears(e.target.value.replace(/[^0-9.]/g, ''))}
-                      className="bg-white/5 border-gray-700 text-white focus:border-[#C9A84C]"
+                      className="bg-white/5 border-gray-700 text-gray-900 dark:text-white focus:border-[#C9A84C]"
                     />
                   </div>
                 </div>

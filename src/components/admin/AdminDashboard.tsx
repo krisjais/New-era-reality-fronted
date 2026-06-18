@@ -98,8 +98,8 @@ function AdminLogin() {
         className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none rounded-2xl p-6 sm:p-8 w-full max-w-md border border-[#C9A84C]/10"
       >
         <div className="text-center mb-6">
-          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#C9A84C] to-[#2563eb] flex items-center justify-center mx-auto mb-3">
-            <Crown className="w-8 h-8 text-gray-900 dark:text-white" />
+          <div className="w-16 h-16 rounded-xl overflow-hidden mx-auto mb-3 shadow-lg border border-[#C9A84C]/20">
+            <img src="/logo.jpg" alt="New Era Reality Logo" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-2xl font-bold text-[#C9A84C] dark:text-[#E8D48B]">Admin Login</h1>
           <p className="text-sm text-muted-foreground mt-1">New Era Reality Dashboard</p>
@@ -123,7 +123,7 @@ function AdminLogin() {
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             {loading ? 'Signing in...' : 'Sign In'}
           </Button>
-          <p className="text-xs text-center text-muted-foreground">Default: admin@newerareality.in / admin123</p>
+
         </form>
       </motion.div>
     </div>

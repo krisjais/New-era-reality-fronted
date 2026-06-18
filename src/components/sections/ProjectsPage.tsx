@@ -37,7 +37,7 @@ export default function ProjectsPage() {
       if (p.price < priceRange[0] || p.price > priceRange[1]) return false
       return true
     })
-  }, [city, bhk, propertyType, possession, priceRange])
+  }, [city, bhk, propertyType, possession, priceRange, properties])
 
   const totalPages = Math.ceil(filtered.length / perPage)
   const paginated = filtered.slice(0, page * perPage)
