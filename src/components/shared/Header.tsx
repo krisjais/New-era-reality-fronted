@@ -128,20 +128,7 @@ export default function Header() {
               <span className="hidden md:inline">WhatsApp</span>
             </a>
 
-            {/* Admin Button */}
-            <Link href="/admin">
-              <Button
-                variant="ghost"
-                size="sm"
-                className={`hidden lg:flex text-xs ${
-                  isHeroTransparent
-                    ? 'text-white/80 hover:text-white hover:bg-white/10'
-                    : 'text-muted-foreground hover:text-[#C9A84C]'
-                }`}
-              >
-                Admin
-              </Button>
-            </Link>
+
 
             {/* Mobile Menu */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/lib/store'
+import { APP_CONFIG } from '@/lib/config'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -58,77 +59,15 @@ const SIDEBAR_ITEMS = [
 
 const CHART_COLORS = ['#C9A84C', '#2563eb', '#60a5fa', '#1d4ed8', '#C9A84C']
 
-// Login Screen
-function AdminLogin() {
-  const { setAdminAuth } = useAppStore()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/admin`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-      if (!res.ok) {
-        setError('Invalid credentials')
-        return
-      }
-      setAdminAuth(true)
-      toast.success('Welcome back, Admin!')
-    } catch {
-      setError('Login failed. Please try again.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0a0a12] px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none rounded-2xl p-6 sm:p-8 w-full max-w-md border border-[#C9A84C]/10"
-      >
-        <div className="text-center mb-6">
-          <div className="w-16 h-16 rounded-xl overflow-hidden mx-auto mb-3 shadow-lg border border-[#C9A84C]/20">
-            <img src="/logo.jpg" alt="New Era Reality Logo" className="w-full h-full object-cover" />
-          </div>
-          <h1 className="text-2xl font-bold text-[#C9A84C] dark:text-[#E8D48B]">Admin Login</h1>
-          <p className="text-sm text-muted-foreground mt-1">New Era Reality Dashboard</p>
-        </div>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="admin-email">Email</Label>
-            <Input id="admin-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@newerareality.in" required />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="admin-password">Password</Label>
-            <div className="relative">
-              <Input id="admin-password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" required />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-2 flex items-center text-muted-foreground hover:text-primary focus:outline-none" aria-label={showPassword ? "Hide password" : "Show password"}>
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-            </div>
-          </div>
-          {error && <p className="text-sm text-red-500">{error}</p>}
-          <Button type="submit" disabled={loading} className="w-full bg-[#C9A84C] hover:bg-[#B8941F] text-white shadow-md shadow-[#C9A84C]/20 transition-all text-gray-900 dark:text-white font-semibold py-3">
-            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-            {loading ? 'Signing in...' : 'Sign In'}
-          </Button>
-
-        </form>
-      </motion.div>
-    </div>
-  )
+function getAuthToken() {
+  if (typeof document === 'undefined') return '';
+  return document.cookie.split('; ').find(row => row.startsWith('admin_token='))?.split('=')[1] || '';
 }
+
+const authHeaders = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${getAuthToken()}`
+});
 
 // Dashboard Overview
 function DashboardOverview() {
@@ -141,7 +80,7 @@ function DashboardOverview() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [propRes, leadRes] = await Promise.all([fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/properties`), fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/leads`)])
+        const [propRes, leadRes] = await Promise.all([fetch(`${APP_CONFIG.API_URL}/properties`, { headers: { 'Authorization': `Bearer ${getAuthToken()}` } }), fetch(`${APP_CONFIG.API_URL}/leads`, { headers: { 'Authorization': `Bearer ${getAuthToken()}` } })])
         const properties: AdminProperty[] = await propRes.json()
         const leads: AdminLead[] = await leadRes.json()
 
@@ -382,7 +321,7 @@ function ProjectsManagement() {
 
   const fetchProperties = useCallback(async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/properties`)
+      const res = await fetch(`${APP_CONFIG.API_URL}/properties`, { headers: { 'Authorization': `Bearer ${getAuthToken()}` } })
       const data = await res.json()
       setProperties(data)
     } catch (err) { console.error(err) }
@@ -395,7 +334,7 @@ function ProjectsManagement() {
     if (!confirm('Are you sure you want to delete this property?')) return
     setProperties(prev => prev.filter(p => p.id !== id))
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/properties/${id}`, { method: 'DELETE' })
+      const res = await fetch(`${APP_CONFIG.API_URL}/properties/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${getAuthToken()}` } })
       if (!res.ok) throw new Error('Failed')
       toast.success('Property deleted')
     } catch { 
@@ -407,11 +346,11 @@ function ProjectsManagement() {
   const handleSave = async (data: Record<string, unknown>) => {
     try {
       if (isNew) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/properties`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+        const res = await fetch(`${APP_CONFIG.API_URL}/properties`, { method: 'POST', headers: authHeaders(), body: JSON.stringify(data) })
         if (!res.ok) throw new Error('Failed')
         toast.success('Property created')
       } else if (editProp) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/properties/${editProp.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+        const res = await fetch(`${APP_CONFIG.API_URL}/properties/${editProp.id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify(data) })
         if (!res.ok) throw new Error('Failed')
         toast.success('Property updated')
       }
@@ -588,7 +527,7 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     formData.append('folder', folder);
     
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/upload`, { method: 'POST', body: formData });
+      const res = await fetch(`${APP_CONFIG.API_URL}/upload`, { method: 'POST', headers: { 'Authorization': `Bearer ${getAuthToken()}` }, body: formData });
       if (res.ok) {
         const data = await res.json();
         setUrls(prev => [...prev, ...data.urls]);
@@ -829,7 +768,7 @@ function LeadsManagement() {
 
   const fetchLeads = useCallback(async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/leads`)
+      const res = await fetch(`${APP_CONFIG.API_URL}/leads`, { headers: { 'Authorization': `Bearer ${getAuthToken()}` } })
       const data = await res.json()
       setLeads(data)
     } catch (err) { console.error(err) }
@@ -841,7 +780,7 @@ function LeadsManagement() {
   const updateStatus = async (id: string, status: string) => {
     setLeads(prev => prev.map(lead => lead.id === id ? { ...lead, status } : lead))
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/leads/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) })
+      const res = await fetch(`${APP_CONFIG.API_URL}/leads/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify({ status }) })
       if (!res.ok) throw new Error('Failed')
       toast.success('Lead status updated')
     } catch { 
@@ -980,7 +919,7 @@ function TestimonialsManagement() {
 
   const fetchTestimonials = useCallback(async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/testimonials`)
+      const res = await fetch(`${APP_CONFIG.API_URL}/testimonials`, { headers: { 'Authorization': `Bearer ${getAuthToken()}` } })
       const data = await res.json()
       setTestimonials(data)
     } catch (err) { console.error(err) }
@@ -992,10 +931,10 @@ function TestimonialsManagement() {
   const handleSave = async (data: Record<string, unknown>) => {
     try {
       if (isNew) {
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/testimonials`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, approved: true }) })
+        await fetch(`${APP_CONFIG.API_URL}/testimonials`, { method: 'POST', headers: authHeaders(), body: JSON.stringify({ ...data, approved: true }) })
         toast.success('Testimonial created')
       } else if (editTest) {
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/testimonials`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, id: editTest.id, approved: true }) })
+        await fetch(`${APP_CONFIG.API_URL}/testimonials`, { method: 'POST', headers: authHeaders(), body: JSON.stringify({ ...data, id: editTest.id, approved: true }) })
         toast.success('Testimonial updated')
       }
       setIsOpen(false)
@@ -1165,7 +1104,7 @@ function NotificationsPage() {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/notifications`)
+      const res = await fetch(`${APP_CONFIG.API_URL}/notifications`, { headers: { 'Authorization': `Bearer ${getAuthToken()}` } })
       const data = await res.json()
       setNotifications(data.notifications || [])
       setUnreadCount(data.unreadCount || 0)
@@ -1179,7 +1118,7 @@ function NotificationsPage() {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n))
     setUnreadCount(prev => Math.max(0, prev - 1))
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/notifications/${id}`, { method: 'PUT' })
+      const res = await fetch(`${APP_CONFIG.API_URL}/notifications/${id}`, { method: 'PUT', headers: { 'Authorization': `Bearer ${getAuthToken()}` } })
       if (!res.ok) throw new Error('Failed')
     } catch { 
       toast.error('Failed to update')
@@ -1192,7 +1131,7 @@ function NotificationsPage() {
     setUnreadCount(0)
     try {
       for (const n of notifications.filter((n) => !n.isRead)) {
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/notifications/${n.id}`, { method: 'PUT' })
+        await fetch(`${APP_CONFIG.API_URL}/notifications/${n.id}`, { method: 'PUT', headers: { 'Authorization': `Bearer ${getAuthToken()}` } })
       }
       toast.success('All marked as read')
     } catch {
@@ -1276,13 +1215,9 @@ function NotificationsPage() {
 
 // Main Admin Dashboard
 export default function AdminDashboard() {
-  const { currentPage, isAdminAuthenticated, setAdminAuth, navigate, theme, toggleTheme } = useAppStore()
+  const { currentPage, setAdminAuth, navigate, theme, toggleTheme } = useAppStore()
   const router = useRouter()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-  if (!isAdminAuthenticated) {
-    return <AdminLogin />
-  }
 
   const renderContent = () => {
     switch (currentPage) {
@@ -1332,7 +1267,7 @@ export default function AdminDashboard() {
           </nav>
           <div className="p-3 mt-auto border-t border-[#C9A84C]/10">
             <button
-              onClick={() => { setAdminAuth(false); router.push('/') }}
+              onClick={() => { document.cookie = 'admin_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'; window.location.href = '/' }}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
@@ -1392,7 +1327,7 @@ export default function AdminDashboard() {
                 </nav>
                 <div className="p-3 mt-auto border-t border-[#C9A84C]/10">
                   <button
-                    onClick={() => { setAdminAuth(false); router.push('/') }}
+                    onClick={() => { document.cookie = 'admin_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'; window.location.href = '/' }}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
                   >
                     <LogOut className="w-4 h-4" />
