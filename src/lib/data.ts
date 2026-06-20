@@ -581,10 +581,10 @@ export const SITE_STATS = {
 }
 
 export const FEATURED_LOCATIONS = [
-  { name: 'Chembur', city: 'Mumbai', count: 25, image: 'https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=600&h=400&fit=crop' },
-  { name: 'Kurla East', city: 'Mumbai', count: 30, image: 'https://images.unsplash.com/photo-1562979314-bee7453e911c?w=600&h=400&fit=crop' },
-  { name: 'Ghatkopar', city: 'Mumbai', count: 20, image: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=600&h=400&fit=crop' },
-  { name: 'Matunga', city: 'Mumbai', count: 15, image: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=600&h=400&fit=crop' },
-  { name: 'Panvel', city: 'Navi Mumbai', count: 35, image: 'https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&h=400&fit=crop' },
+  { name: 'Chembur', city: 'Mumbai', count: 25, image: "Gemini_Generated_Image_j52byxj52byxj52b.png" },
+  { name: 'Kurla East', city: 'Mumbai', count: 30, image: 'Gemini_Generated_Image_75i9pl75i9pl75i9.png' },
+  { name: 'Ghatkopar', city: 'Mumbai', count: 20, image: "Gemini_Generated_Image_ao83b0ao83b0ao83.png" },
+  { name: 'Matunga', city: 'Mumbai', count: 15, image: "a6a2082402c5d48b2715e3d69ed095b0.jpg" },
+  { name: 'Panvel', city: 'Navi Mumbai', count: 35, image: "Gemini_Generated_Image_kdeddpkdeddpkded (1).png" },
   { name: 'Atgaon', city: 'Thane', count: 12, image: 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=600&h=400&fit=crop' },
 ]
