@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import ChatBot from "@/components/shared/ChatBot";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -44,6 +45,7 @@ export default function RootLayout({
       >
         {children}
         <Toaster richColors position="top-right" />
+        <ChatBot />
       </body>
     </html>
   );

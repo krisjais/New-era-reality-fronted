@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import { useAppStore } from '@/lib/store'
 import PropertyCard from '@/components/shared/PropertyCard'
+import { PropertyCardSkeleton } from '@/components/shared/PropertyCardSkeleton'
+import CompareModal from '@/components/shared/CompareModal'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -28,6 +30,7 @@ export default function ProjectsPage() {
 function ProjectsPageContent() {
   const { compareList, clearCompare, navigate, properties } = useAppStore()
   const searchParams = useSearchParams()
+  const [showCompare, setShowCompare] = useState(false)
   const [city, setCity] = useState(searchParams.get('city') || 'All')
   const [bhk, setBhk] = useState(searchParams.get('bhk') || 'All')
   const [propertyType, setPropertyType] = useState('All')
@@ -244,7 +247,7 @@ function ProjectsPageContent() {
                   <Button variant="ghost" size="sm" onClick={clearCompare} className="text-xs text-muted-foreground">
                     Clear
                   </Button>
-                  <Button size="sm" className="btn-gold text-white text-xs" disabled={compareList.length < 2}>
+                  <Button size="sm" className="btn-gold text-white text-xs" disabled={compareList.length < 2} onClick={() => setShowCompare(true)}>
                     Compare Now
                   </Button>
                 </div>
@@ -253,6 +256,13 @@ function ProjectsPageContent() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Compare Modal */}
+      <CompareModal 
+        isOpen={showCompare} 
+        onClose={() => setShowCompare(false)} 
+        properties={compareProperties} 
+      />
     </main>
   )
 }

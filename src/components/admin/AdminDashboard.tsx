@@ -508,6 +508,7 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     reraRegistered: property?.reraRegistered ? 'true' : 'false',
     areaSqft: String(property?.areaSqft || ''),
     pricePerSqft: String(property?.pricePerSqft || ''),
+    floorCount: String(property?.floorCount || ''),
   });
 
   const getArray = (val: unknown): string[] => {
@@ -590,6 +591,7 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     
     payload.areaSqft = form.areaSqft ? parseFloat(form.areaSqft) : null;
     payload.pricePerSqft = form.pricePerSqft ? parseFloat(form.pricePerSqft) : null;
+    payload.floorCount = form.floorCount ? parseInt(form.floorCount, 10) : null;
     
     payload.images = images;
     payload.floorPlans = floorPlans;
@@ -622,9 +624,10 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
         <div className="space-y-2"><Label className="text-xs sm:text-sm">Price Label</Label><Input value={form.priceLabel} onChange={(e) => setForm({ ...form, priceLabel: e.target.value })} placeholder="₹1.5 Cr" /></div>
         <div className="space-y-2"><Label className="text-xs sm:text-sm">BHK</Label><Input value={form.bhk} onChange={(e) => setForm({ ...form, bhk: e.target.value })} placeholder="2 BHK" /></div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="space-y-2"><Label className="text-xs sm:text-sm">Area (Sq.Ft)</Label><Input type="number" value={form.areaSqft} onChange={(e) => setForm({ ...form, areaSqft: e.target.value })} placeholder="1200" /></div>
         <div className="space-y-2"><Label className="text-xs sm:text-sm">Price per Sq.Ft</Label><Input type="number" value={form.pricePerSqft} onChange={(e) => setForm({ ...form, pricePerSqft: e.target.value })} placeholder="15000" /></div>
+        <div className="space-y-2"><Label className="text-xs sm:text-sm">Total Floors</Label><Input type="number" value={form.floorCount} onChange={(e) => setForm({ ...form, floorCount: e.target.value })} placeholder="20" /></div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div className="space-y-2"><Label className="text-xs sm:text-sm">City</Label>
