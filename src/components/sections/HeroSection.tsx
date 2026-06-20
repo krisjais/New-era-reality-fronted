@@ -140,7 +140,7 @@ export default function HeroSection() {
                     <SelectValue placeholder="Budget Range" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="90L-1Cr">₹90 L - ₹1 Cr</SelectItem>
+                    <SelectItem value="0-1Cr">₹0 - ₹1 Cr</SelectItem>
                     <SelectItem value="1Cr-2Cr">₹1 Cr - ₹2 Cr</SelectItem>
                     <SelectItem value="2Cr+">Above ₹2 Cr</SelectItem>
                   </SelectContent>

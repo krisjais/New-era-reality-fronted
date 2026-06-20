@@ -128,8 +128,6 @@ export default function Header() {
               <span className="hidden md:inline">WhatsApp</span>
             </a>
 
-
-
             {/* Mobile Menu */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
@@ -168,13 +166,6 @@ export default function Header() {
                     )
                   })}
                   <div className="luxury-divider my-4" />
-                  <Link href="/admin" onClick={() => setMobileOpen(false)}>
-                    <div
-                      className="flex items-center px-4 py-3 rounded-lg text-left font-medium text-foreground/70 hover:bg-muted hover:text-foreground transition-all cursor-pointer"
-                    >
-                      Admin Dashboard
-                    </div>
-                  </Link>
                   <div className="mt-4 px-4">
                     <a
                       href="https://wa.me/917021731962"
