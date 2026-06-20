@@ -311,7 +311,7 @@ export const PROPERTIES: PropertyData[] = [
     bhk: '1 BHK',
     bhkNumber: 1,
     price: 4500000,
-    priceLabel: '₹45 Lac',
+    priceLabel: '₹45 L',
     pricePerSqft: 3982,
     areaSqft: 1130,
     carpetArea: 1000,
@@ -389,7 +389,7 @@ export const PROPERTIES: PropertyData[] = [
     bhk: null,
     bhkNumber: null,
     price: 1200000,
-    priceLabel: '₹12 Lac',
+    priceLabel: '₹12 L',
     pricePerSqft: 575,
     areaSqft: 2088,
     carpetArea: null,
@@ -428,7 +428,7 @@ export const PROPERTIES: PropertyData[] = [
     bhk: '2 BHK',
     bhkNumber: 2,
     price: 9500000,
-    priceLabel: '₹95 Lac',
+    priceLabel: '₹95 L',
     pricePerSqft: 15200,
     areaSqft: 625,
     carpetArea: 520,
@@ -581,10 +581,10 @@ export const SITE_STATS = {
 }
 
 export const FEATURED_LOCATIONS = [
-  { name: 'Chembur', city: 'Mumbai', count: 25, image: 'https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=600&h=400&fit=crop' },
-  { name: 'Kurla East', city: 'Mumbai', count: 30, image: 'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=600&h=400&fit=crop' },
-  { name: 'Ghatkopar', city: 'Mumbai', count: 20, image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop' },
-  { name: 'Matunga', city: 'Mumbai', count: 15, image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&h=400&fit=crop' },
-  { name: 'Panvel', city: 'Navi Mumbai', count: 35, image: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600&h=400&fit=crop' },
-  { name: 'Atgaon', city: 'Thane', count: 12, image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop' },
+  { name: 'Chembur', city: 'Mumbai', count: 25, image: 'https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=600&h=400&fit=crop' },
+  { name: 'Kurla East', city: 'Mumbai', count: 30, image: 'https://images.unsplash.com/photo-1562979314-bee7453e911c?w=600&h=400&fit=crop' },
+  { name: 'Ghatkopar', city: 'Mumbai', count: 20, image: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=600&h=400&fit=crop' },
+  { name: 'Matunga', city: 'Mumbai', count: 15, image: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=600&h=400&fit=crop' },
+  { name: 'Panvel', city: 'Navi Mumbai', count: 35, image: 'https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&h=400&fit=crop' },
+  { name: 'Atgaon', city: 'Thane', count: 12, image: 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=600&h=400&fit=crop' },
 ]

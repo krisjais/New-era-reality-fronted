@@ -42,7 +42,11 @@ export default function HeroSection() {
   const [filters, setFilters] = useState({ location: '', bhk: '', budget: '' })
 
   const handleSearch = () => {
-    router.push('/projects')
+    const params = new URLSearchParams()
+    if (filters.location) params.set('city', filters.location)
+    if (filters.bhk) params.set('bhk', filters.bhk)
+    if (filters.budget) params.set('budget', filters.budget)
+    router.push(`/projects?${params.toString()}`)
   }
 
   return (
@@ -50,7 +54,7 @@ export default function HeroSection() {
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&h=1080&fit=crop"
+          src="/hero-bg.png"
           alt="Luxury Home"
           className="w-full h-full object-cover"
         />
@@ -136,8 +140,7 @@ export default function HeroSection() {
                     <SelectValue placeholder="Budget Range" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="0-50L">Under ₹50 Lac</SelectItem>
-                    <SelectItem value="50L-1Cr">₹50 Lac - ₹1 Cr</SelectItem>
+                    <SelectItem value="90L-1Cr">₹90 L - ₹1 Cr</SelectItem>
                     <SelectItem value="1Cr-2Cr">₹1 Cr - ₹2 Cr</SelectItem>
                     <SelectItem value="2Cr+">Above ₹2 Cr</SelectItem>
                   </SelectContent>

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useSearchParams } from 'next/navigation'
 import { useAppStore } from '@/lib/store'
 import PropertyCard from '@/components/shared/PropertyCard'
 import { Button } from '@/components/ui/button'
@@ -17,12 +18,27 @@ const PROPERTY_TYPES = ['All', 'Apartment', 'Villa', 'Plot']
 const POSSESSION_OPTIONS = ['All', 'Ready to Move', 'Under Construction']
 
 export default function ProjectsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen pt-20 pb-16 text-center">Loading properties...</div>}>
+      <ProjectsPageContent />
+    </Suspense>
+  )
+}
+
+function ProjectsPageContent() {
   const { compareList, clearCompare, navigate, properties } = useAppStore()
-  const [city, setCity] = useState('All')
-  const [bhk, setBhk] = useState('All')
+  const searchParams = useSearchParams()
+  const [city, setCity] = useState(searchParams.get('city') || 'All')
+  const [bhk, setBhk] = useState(searchParams.get('bhk') || 'All')
   const [propertyType, setPropertyType] = useState('All')
   const [possession, setPossession] = useState('All')
-  const [priceRange, setPriceRange] = useState([0, 50000000])
+  const [priceRange, setPriceRange] = useState(() => {
+    const budget = searchParams.get('budget')
+    if (budget === '90L-1Cr') return [9000000, 10000000]
+    if (budget === '1Cr-2Cr') return [10000000, 20000000]
+    if (budget === '2Cr+') return [20000000, 50000000]
+    return [9000000, 50000000]
+  })
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [showFilters, setShowFilters] = useState(false)
   const [page, setPage] = useState(1)
@@ -44,7 +60,7 @@ export default function ProjectsPage() {
 
   const formatPrice = (val: number) => {
     if (val >= 10000000) return `₹${(val / 10000000).toFixed(0)} Cr`
-    if (val >= 100000) return `₹${(val / 100000).toFixed(0)} Lac`
+    if (val >= 100000) return `₹${(val / 100000).toFixed(0)} L`
     return `₹${val.toLocaleString()}`
   }
 
@@ -85,7 +101,7 @@ export default function ProjectsPage() {
                 size="sm"
                 onClick={() => {
                   setCity('All'); setBhk('All'); setPropertyType('All'); setPossession('All')
-                  setPriceRange([0, 50000000])
+                  setPriceRange([9000000, 50000000])
                 }}
                 className="text-xs text-muted-foreground"
               >
@@ -157,7 +173,7 @@ export default function ProjectsPage() {
               <Slider
                 value={priceRange}
                 onValueChange={setPriceRange}
-                min={0}
+                min={9000000}
                 max={50000000}
                 step={500000}
                 className="w-full"
@@ -170,7 +186,7 @@ export default function ProjectsPage() {
         {filtered.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-muted-foreground text-lg">No properties match your filters.</p>
-            <Button variant="outline" onClick={() => { setCity('All'); setBhk('All'); setPropertyType('All'); setPossession('All'); setPriceRange([0, 50000000]) }} className="mt-4 btn-gold-outline">
+            <Button variant="outline" onClick={() => { setCity('All'); setBhk('All'); setPropertyType('All'); setPossession('All'); setPriceRange([9000000, 50000000]) }} className="mt-4 btn-gold-outline">
               Clear Filters
             </Button>
           </div>

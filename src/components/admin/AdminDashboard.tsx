@@ -71,6 +71,7 @@ const authHeaders = () => ({
 
 // Dashboard Overview
 function DashboardOverview() {
+  const { theme } = useAppStore()
   const [stats, setStats] = useState({ properties: 0, leads: 0, views: 0, likes: 0 })
   const [leadsByType, setLeadsByType] = useState<{ name: string; value: number }[]>([])
   const [leadsOverTime, setLeadsOverTime] = useState<{ name: string; count: number }[]>([])
@@ -192,7 +193,15 @@ function DashboardOverview() {
                       <Cell key={index} fill={['#C9A84C', '#E8D48B', '#D4AF37', '#B8941F', '#A8892E'][index % 5]} />
                     ))}
                   </Pie>
-                  <Tooltip contentStyle={{ backgroundColor: 'var(--tw-colors-white)', border: '1px solid #e5e7eb', borderRadius: '8px' }} itemStyle={{ color: '#111827' }} />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: theme === 'dark' ? '#1a1a24' : '#fff', 
+                      border: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e5e7eb', 
+                      borderRadius: '8px',
+                      color: theme === 'dark' ? '#fff' : '#111827'
+                    }} 
+                    itemStyle={{ color: theme === 'dark' ? '#fff' : '#111827' }} 
+                  />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
@@ -225,7 +234,16 @@ function DashboardOverview() {
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
                   <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#888' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 11, fill: '#888' }} axisLine={false} tickLine={false} />
-                  <Tooltip cursor={{ fill: 'rgba(201,168,76,0.05)' }} contentStyle={{ backgroundColor: 'var(--tw-colors-white)', border: '1px solid #e5e7eb', borderRadius: '8px' }} />
+                  <Tooltip 
+                    cursor={{ fill: 'rgba(201,168,76,0.05)' }} 
+                    contentStyle={{ 
+                      backgroundColor: theme === 'dark' ? '#1a1a24' : '#fff', 
+                      border: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e5e7eb', 
+                      borderRadius: '8px',
+                      color: theme === 'dark' ? '#fff' : '#111827'
+                    }}
+                    itemStyle={{ color: theme === 'dark' ? '#fff' : '#111827' }}
+                  />
                   <Bar dataKey="count" fill="url(#blueGradient)" radius={[4, 4, 0, 0]} maxBarSize={40} />
                   <defs>
                     <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
@@ -558,7 +576,18 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     payload.featured = form.featured === 'true';
     payload.premium = form.premium === 'true';
     payload.reraRegistered = form.reraRegistered === 'true';
-    payload.price = parseFloat(form.price) || 0;
+    
+    let parsedPrice = 0;
+    const numMatch = form.priceLabel.match(/[\d.]+/);
+    if (numMatch) {
+      const val = parseFloat(numMatch[0]);
+      if (form.priceLabel.toLowerCase().includes('cr')) parsedPrice = val * 10000000;
+      else if (form.priceLabel.toLowerCase().includes('l') || form.priceLabel.toLowerCase().includes('lac')) parsedPrice = val * 100000;
+      else if (form.priceLabel.toLowerCase().includes('k')) parsedPrice = val * 1000;
+      else parsedPrice = val;
+    }
+    payload.price = parsedPrice;
+    
     payload.areaSqft = form.areaSqft ? parseFloat(form.areaSqft) : null;
     payload.pricePerSqft = form.pricePerSqft ? parseFloat(form.pricePerSqft) : null;
     
@@ -1219,6 +1248,12 @@ export default function AdminDashboard() {
   const router = useRouter()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  useEffect(() => {
+    if (!currentPage.startsWith('admin')) {
+      navigate('admin')
+    }
+  }, [currentPage, navigate])
+
   const renderContent = () => {
     switch (currentPage) {
       case 'admin': return <DashboardOverview />
@@ -1354,17 +1389,7 @@ export default function AdminDashboard() {
               <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-md object-contain" />
             </div>
 
-            {/* Search */}
-            <div className="hidden md:flex relative w-96 ml-4 lg:ml-0">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-              </div>
-              <input 
-                type="text" 
-                placeholder="Use ⌘+S to Search a keyword..." 
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-[#13131a] text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A84C] transition-shadow text-gray-900 dark:text-white"
-              />
-            </div>
+
 
             <div className="flex items-center gap-3 sm:gap-4 ml-auto">
               {/* Theme Toggle */}

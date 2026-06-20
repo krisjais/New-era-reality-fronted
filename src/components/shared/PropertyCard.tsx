@@ -47,7 +47,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
       onClick={handleClick}
-      className="group glass-card rounded-2xl overflow-hidden property-card-hover cursor-pointer"
+      className="group glass-card rounded-2xl overflow-hidden property-card-hover cursor-pointer h-full flex flex-col"
     >
       {/* Image Section */}
       <div className="relative h-52 sm:h-56 overflow-hidden">
@@ -156,7 +156,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
       </div>
 
       {/* Content Section */}
-      <div className="p-4 sm:p-5">
+      <div className="p-4 sm:p-5 flex-1 flex flex-col">
         {/* Name & Builder */}
         <h3 className="font-bold text-lg text-foreground group-hover:text-[#C9A84C] transition-colors line-clamp-1">
           {property.name}
@@ -172,7 +172,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         </div>
 
         {/* Badges Row */}
-        <div className="flex flex-wrap gap-1.5 mt-3">
+        <div className="flex flex-wrap gap-1.5 mt-auto pt-3">
           {property.bhk && (
             <Badge variant="secondary" className="text-xs">
               <Building2 className="w-3 h-3 mr-1" />
