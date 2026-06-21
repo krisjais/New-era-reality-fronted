@@ -527,11 +527,15 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
   const [amenities, setAmenities] = useState<string[]>(getArray(property?.amenities));
   const [newAmenity, setNewAmenity] = useState('');
   
+  const [nearbyLandmarks, setNearbyLandmarks] = useState<string[]>(getArray(property?.nearbyLandmarks));
+  const [newLandmark, setNewLandmark] = useState('');
+  
   const [uploading, setUploading] = useState(false);
   const [uploadingFloorPlans, setUploadingFloorPlans] = useState(false);
   const [uploadingBrochures, setUploadingBrochures] = useState(false);
 
   const PRESET_AMENITIES = ["Swimming Pool", "Gymnasium", "Clubhouse", "24/7 Security", "Power Backup", "Parking", "Kids Play Area", "Jogging Track"];
+  const PRESET_LANDMARKS = ["Hospital", "School", "Bank", "Railway Station", "ATM", "Bus Stop", "Airport", "Shopping Mall", "Metro Station"];
 
   const handleFileUpload = async (
     e: React.ChangeEvent<HTMLInputElement>, 
@@ -572,6 +576,18 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     setNewAmenity('');
   };
 
+  const toggleLandmark = (landmark: string) => {
+    if (nearbyLandmarks.includes(landmark)) setNearbyLandmarks(nearbyLandmarks.filter(l => l !== landmark));
+    else setNearbyLandmarks([...nearbyLandmarks, landmark]);
+  };
+
+  const handleAddCustomLandmark = () => {
+    if (newLandmark.trim() && !nearbyLandmarks.includes(newLandmark.trim())) {
+      setNearbyLandmarks([...nearbyLandmarks, newLandmark.trim()]);
+    }
+    setNewLandmark('');
+  };
+
   const handleFormSave = () => {
     const payload: Record<string, unknown> = { ...form };
     payload.featured = form.featured === 'true';
@@ -598,6 +614,7 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     payload.brochures = brochures;
     payload.thumbnailUrl = thumbnailUrl || (images.length > 0 ? images[0] : '');
     payload.amenities = amenities;
+    payload.nearbyLandmarks = nearbyLandmarks;
     
     if (!property?.slug) payload.slug = form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     onSave(payload);
@@ -781,6 +798,34 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
         <div className="flex gap-2">
           <Input value={newAmenity} onChange={e => setNewAmenity(e.target.value)} placeholder="Add custom amenity..." className="max-w-xs" onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAddCustomAmenity())} />
           <Button type="button" variant="outline" onClick={handleAddCustomAmenity}>Add</Button>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label className="text-xs sm:text-sm">Nearby Landmarks</Label>
+        <div className="flex flex-wrap gap-2 mb-2">
+          {PRESET_LANDMARKS.map((landmark) => {
+            const isSelected = nearbyLandmarks.includes(landmark);
+            return (
+              <Badge 
+                key={landmark} 
+                variant={isSelected ? "default" : "outline"} 
+                className={`cursor-pointer ${isSelected ? 'bg-[#C9A84C] text-gray-900 dark:text-white hover:bg-[#2563eb]' : 'hover:border-[#C9A84C]'}`}
+                onClick={() => toggleLandmark(landmark)}
+              >
+                {landmark}
+              </Badge>
+            );
+          })}
+          {nearbyLandmarks.filter(a => !PRESET_LANDMARKS.includes(a)).map(landmark => (
+            <Badge key={landmark} className="cursor-pointer bg-[#C9A84C] text-gray-900 dark:text-white hover:bg-[#2563eb]" onClick={() => toggleLandmark(landmark)}>
+              {landmark} <X className="w-3 h-3 ml-1" />
+            </Badge>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <Input value={newLandmark} onChange={e => setNewLandmark(e.target.value)} placeholder="Add custom landmark..." className="max-w-xs" onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAddCustomLandmark())} />
+          <Button type="button" variant="outline" onClick={handleAddCustomLandmark}>Add</Button>
         </div>
       </div>
 

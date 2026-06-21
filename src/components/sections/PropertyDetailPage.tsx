@@ -17,7 +17,8 @@ import {
   Calendar, User, CheckCircle2, ArrowLeft, Waves, Dumbbell, Baby, Footprints, 
   Building, Zap, ShieldCheck, PhoneCall, TreePine, Gamepad2, Car, Cctv, 
   Flower2, Activity, ArrowUpDown, CloudRain, Wrench, Compass, BellRing, 
-  Flame, Wifi
+  Flame, Wifi, Hospital, GraduationCap, Landmark, Train, CreditCard, Bus, 
+  Plane, ShoppingBag, Check, Trash2
 } from 'lucide-react'
 
 interface PropertyDetailPageProps {
@@ -63,29 +64,46 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
 
   const getAmenityIcon = (amenity: string) => {
     const name = amenity.toLowerCase()
-    if (name.includes('pool')) return <Waves className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('gym')) return <Dumbbell className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('play') || name.includes('kid') || name.includes('child')) return <Baby className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('jog') || name.includes('track')) return <Footprints className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('club')) return <Building className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('power') || name.includes('backup')) return <Zap className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('security') || name.includes('guard')) return <ShieldCheck className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('intercom')) return <PhoneCall className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('garden') || name.includes('park') || name.includes('landscape')) return <TreePine className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('game')) return <Gamepad2 className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('parking') || name.includes('car')) return <Car className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('cctv') || name.includes('camera')) return <Cctv className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('spa') || name.includes('massage')) return <Flower2 className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('tennis') || name.includes('sport')) return <Activity className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('ev') || name.includes('charging')) return <Zap className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('lift') || name.includes('elevator')) return <ArrowUpDown className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('rain') || name.includes('water')) return <CloudRain className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('maintenance')) return <Wrench className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('vastu')) return <Compass className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('alarm') || name.includes('fire')) return <BellRing className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('gas')) return <Flame className="w-8 h-8 text-muted-foreground mb-3" />
-    if (name.includes('wifi') || name.includes('internet')) return <Wifi className="w-8 h-8 text-muted-foreground mb-3" />
-    return <CheckCircle2 className="w-8 h-8 text-muted-foreground mb-3" />
+    const iconClass = "w-8 h-8 text-gray-500 dark:text-gray-400 mb-3 stroke-[1.5]"
+    
+    if (name.includes('earthquake')) return <Shield className={iconClass} />
+    if (name.includes('fire')) return <Flame className={iconClass} />
+    if (name.includes('waste')) return <Trash2 className={iconClass} />
+    if (name.includes('bank') || name.includes('banquet')) return <Building className={iconClass} />
+    if (name.includes('pool') || name.includes('water') || name.includes('effluent') || name.includes('sewage') || name.includes('rain')) return <Waves className={iconClass} />
+    if (name.includes('gym')) return <Dumbbell className={iconClass} />
+    if (name.includes('play') || name.includes('kid') || name.includes('child')) return <Baby className={iconClass} />
+    if (name.includes('jog') || name.includes('track')) return <Footprints className={iconClass} />
+    if (name.includes('club')) return <Building2 className={iconClass} />
+    if (name.includes('power') || name.includes('backup') || name.includes('light') || name.includes('zap') || name.includes('ev')) return <Zap className={iconClass} />
+    if (name.includes('security') || name.includes('guard') || name.includes('cctv') || name.includes('camera') || name.includes('alarm')) return <Cctv className={iconClass} />
+    if (name.includes('intercom')) return <PhoneCall className={iconClass} />
+    if (name.includes('garden') || name.includes('park') || name.includes('landscape')) return <TreePine className={iconClass} />
+    if (name.includes('game') || name.includes('sport') || name.includes('court') || name.includes('tennis') || name.includes('basket')) return <Activity className={iconClass} />
+    if (name.includes('parking') || name.includes('car')) return <Car className={iconClass} />
+    if (name.includes('spa') || name.includes('massage') || name.includes('meditation')) return <Flower2 className={iconClass} />
+    if (name.includes('lift') || name.includes('elevator')) return <ArrowUpDown className={iconClass} />
+    if (name.includes('maintenance') || name.includes('repair')) return <Wrench className={iconClass} />
+    if (name.includes('vastu')) return <Compass className={iconClass} />
+    if (name.includes('gas')) return <Flame className={iconClass} />
+    if (name.includes('wifi') || name.includes('internet')) return <Wifi className={iconClass} />
+    if (name.includes('terrace')) return <Home className={iconClass} />
+    if (name.includes('school')) return <GraduationCap className={iconClass} />
+    return <CheckCircle2 className={iconClass} />
+  }
+
+  const getLandmarkIcon = (landmark: string) => {
+    const name = landmark.toLowerCase()
+    if (name.includes('hospital') || name.includes('clinic')) return <Hospital className="w-5 h-5 text-blue-400" />
+    if (name.includes('school') || name.includes('college') || name.includes('education')) return <GraduationCap className="w-5 h-5 text-blue-400" />
+    if (name.includes('bank') || name.includes('finance')) return <Landmark className="w-5 h-5 text-blue-400" />
+    if (name.includes('railway') || name.includes('train')) return <Train className="w-5 h-5 text-blue-400" />
+    if (name.includes('atm')) return <CreditCard className="w-5 h-5 text-blue-400" />
+    if (name.includes('bus')) return <Bus className="w-5 h-5 text-blue-400" />
+    if (name.includes('airport') || name.includes('plane')) return <Plane className="w-5 h-5 text-blue-400" />
+    if (name.includes('mall') || name.includes('shop') || name.includes('market')) return <ShoppingBag className="w-5 h-5 text-blue-400" />
+    if (name.includes('metro')) return <Train className="w-5 h-5 text-blue-400" />
+    return <MapPin className="w-5 h-5 text-blue-400" />
   }
 
   return (
@@ -265,11 +283,11 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
                 </TabsContent>
 
                 <TabsContent value="amenities" className="mt-4">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 border-l border-t border-gray-200 dark:border-white/10 bg-white dark:bg-[#1a1a24] rounded-xl overflow-hidden shadow-sm">
                     {Array.isArray(property.amenities) && property.amenities.map((amenity) => (
-                      <div key={amenity} className="flex flex-col items-center justify-center p-6 rounded-xl bg-muted/20 border border-border/50 text-center hover:bg-muted/40 transition-colors">
+                      <div key={amenity} className="flex flex-col items-center justify-center p-6 border-r border-b border-gray-200 dark:border-white/10 text-center hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-default">
                         {getAmenityIcon(amenity)}
-                        <span className="text-sm font-medium text-foreground">{amenity}</span>
+                        <span className="text-[13px] font-medium text-gray-600 dark:text-gray-300 leading-tight">{amenity}</span>
                       </div>
                     ))}
                   </div>
@@ -288,15 +306,6 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
                         <span className="text-sm">{property.location}{property.city !== property.location ? `, ${property.city}` : ''}</span>
                       </div>
                     )}
-                    <h4 className="font-semibold mt-4">Nearby Landmarks</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {Array.isArray(property.nearbyLandmarks) && property.nearbyLandmarks.map((landmark) => (
-                        <div key={landmark} className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <div className="w-1.5 h-1.5 rounded-full bg-[#C9A84C]" />
-                          {landmark}
-                        </div>
-                      ))}
-                    </div>
                   </div>
                 </TabsContent>
 
