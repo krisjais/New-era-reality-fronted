@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { FEATURED_LOCATIONS } from '@/lib/data'
 import { MapPin, Building2 } from 'lucide-react'
 
@@ -46,10 +47,13 @@ export default function FeaturedLocations() {
               onClick={() => handleLocationClick(location.name)}
               className="relative h-56 sm:h-64 rounded-2xl overflow-hidden cursor-pointer group"
             >
-              <img
+              <Image
                 src={location.image}
-                alt={location.name}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                alt={`Properties in ${location.name}, ${location.city}`}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover group-hover:scale-110 transition-transform duration-700"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">
