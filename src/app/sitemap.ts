@@ -14,13 +14,17 @@ interface Property {
 
 async function getAllProperties(): Promise<Property[]> {
   try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 5000) // 5 second timeout
     const res = await fetch(`${API_BASE}/properties`, {
-      next: { revalidate: 3600 },
+      signal: controller.signal,
+      cache: 'no-store',
     })
+    clearTimeout(timeout)
     if (!res.ok) return []
     return res.json()
   } catch {
-    return []
+    return [] // Always return static pages even if backend is down
   }
 }
 
