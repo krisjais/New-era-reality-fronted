@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     images: ["/logo.jpg"],
   },
   verification: {
-    google: "REPLACE_WITH_GOOGLE_SEARCH_CONSOLE_CODE",
+    google: "z3rORXxN7BQCXYYGEgbDOKIQjuGX5VccMHL8lMUlCpY",
   },
 };
 
