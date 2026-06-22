@@ -93,7 +93,7 @@ export default function EmiCalculatorPage() {
               {/* Form Body */}
               <div className="p-6 sm:p-8 space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
-                  <Label className="text-sm font-medium text-gray-300 sm:text-right pr-4">Loan Amount (Rs.)</Label>
+                  <Label className="text-sm font-medium text-foreground/80 dark:text-gray-300 sm:text-right pr-4">Loan Amount (Rs.)</Label>
                   <div className="sm:col-span-2">
                     <Input
                       type="text"
@@ -101,13 +101,13 @@ export default function EmiCalculatorPage() {
                       placeholder="e.g. 5000000"
                       value={principal}
                       onChange={(e) => setPrincipal(e.target.value.replace(/[^0-9.]/g, ''))}
-                      className="bg-white/5 border-gray-700 text-gray-900 dark:text-white focus:border-[#C9A84C]"
+                      className="bg-transparent dark:bg-white/5 border-border dark:border-gray-700 text-foreground dark:text-white focus:border-[#C9A84C]"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
-                  <Label className="text-sm font-medium text-gray-300 sm:text-right pr-4">Interest Rate (%)</Label>
+                  <Label className="text-sm font-medium text-foreground/80 dark:text-gray-300 sm:text-right pr-4">Interest Rate (%)</Label>
                   <div className="sm:col-span-2">
                     <Input
                       type="text"
@@ -115,13 +115,13 @@ export default function EmiCalculatorPage() {
                       placeholder="e.g. 8.5"
                       value={rate}
                       onChange={(e) => setRate(e.target.value.replace(/[^0-9.]/g, ''))}
-                      className="bg-white/5 border-gray-700 text-gray-900 dark:text-white focus:border-[#C9A84C]"
+                      className="bg-transparent dark:bg-white/5 border-border dark:border-gray-700 text-foreground dark:text-white focus:border-[#C9A84C]"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
-                  <Label className="text-sm font-medium text-gray-300 sm:text-right pr-4">Loan Period (Yrs)</Label>
+                  <Label className="text-sm font-medium text-foreground/80 dark:text-gray-300 sm:text-right pr-4">Loan Period (Yrs)</Label>
                   <div className="sm:col-span-2">
                     <Input
                       type="text"
@@ -129,15 +129,15 @@ export default function EmiCalculatorPage() {
                       placeholder="e.g. 20"
                       value={years}
                       onChange={(e) => setYears(e.target.value.replace(/[^0-9.]/g, ''))}
-                      className="bg-white/5 border-gray-700 text-gray-900 dark:text-white focus:border-[#C9A84C]"
+                      className="bg-transparent dark:bg-white/5 border-border dark:border-gray-700 text-foreground dark:text-white focus:border-[#C9A84C]"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center pt-4 border-t border-gray-800">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center pt-4 border-t border-border dark:border-gray-800">
                   <Label className="text-sm font-bold text-[#C9A84C] sm:text-right pr-4">Monthly EMI (Rs.)</Label>
                   <div className="sm:col-span-2">
-                    <div className="bg-[#0a0a12] border border-[#C9A84C]/30 rounded-md p-3 text-white font-semibold text-lg flex items-center h-11">
+                    <div className="bg-muted dark:bg-[#0a0a12] border border-[#C9A84C]/30 rounded-md p-3 text-foreground dark:text-white font-semibold text-lg flex items-center h-11">
                       {emi !== null ? formatCurrency(emi) : '-'}
                     </div>
                   </div>
@@ -147,21 +147,21 @@ export default function EmiCalculatorPage() {
                   <motion.div 
                     initial={{ opacity: 0, height: 0 }} 
                     animate={{ opacity: 1, height: 'auto' }} 
-                    className="space-y-4 pt-4 border-t border-gray-800/50"
+                    className="space-y-4 pt-4 border-t border-border dark:border-gray-800/50"
                   >
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
-                      <Label className="text-sm font-medium text-gray-400 sm:text-right pr-4">Total Interest Paid</Label>
+                      <Label className="text-sm font-medium text-muted-foreground dark:text-gray-400 sm:text-right pr-4">Total Interest Paid</Label>
                       <div className="sm:col-span-2">
-                        <div className="bg-white/5 border border-gray-800 rounded-md p-3 text-gray-300 font-medium flex items-center h-11">
+                        <div className="bg-transparent dark:bg-white/5 border border-border dark:border-gray-800 rounded-md p-3 text-foreground/80 dark:text-gray-300 font-medium flex items-center h-11">
                           {formatCurrency(totalInterest)}
                         </div>
                       </div>
                     </div>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
-                      <Label className="text-sm font-medium text-gray-400 sm:text-right pr-4">Total Payment</Label>
+                      <Label className="text-sm font-medium text-muted-foreground dark:text-gray-400 sm:text-right pr-4">Total Payment</Label>
                       <div className="sm:col-span-2">
-                        <div className="bg-white/5 border border-gray-800 rounded-md p-3 text-gray-300 font-medium flex items-center h-11">
+                        <div className="bg-transparent dark:bg-white/5 border border-border dark:border-gray-800 rounded-md p-3 text-foreground/80 dark:text-gray-300 font-medium flex items-center h-11">
                           {formatCurrency(totalPayment)}
                         </div>
                       </div>
@@ -174,7 +174,7 @@ export default function EmiCalculatorPage() {
                   <Button
                     onClick={handleClear}
                     variant="outline"
-                    className="w-full sm:w-auto border-gray-700 text-gray-300 hover:text-white hover:bg-white/5"
+                    className="w-full sm:w-auto border-border dark:border-gray-700 text-foreground/80 dark:text-gray-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/5"
                   >
                     Clear
                   </Button>
@@ -206,7 +206,7 @@ export default function EmiCalculatorPage() {
                 {hotProperties.length > 0 ? (
                   hotProperties.map((property) => (
                     <Link href={`/property/${property.id}`} key={property.id} className="block group">
-                      <div className="flex gap-4 items-center pb-4 border-b border-gray-800 last:border-0 last:pb-0">
+                      <div className="flex gap-4 items-center pb-4 border-b border-border dark:border-gray-800 last:border-0 last:pb-0">
                         <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 relative">
                           <img
                             src={Array.isArray(property.images) && property.images.length > 0 ? property.images[0] : 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=200&h=200&fit=crop'}
@@ -215,10 +215,10 @@ export default function EmiCalculatorPage() {
                           />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-semibold text-gray-200 group-hover:text-[#C9A84C] transition-colors line-clamp-2">
+                          <h4 className="text-sm font-semibold text-foreground dark:text-gray-200 group-hover:text-[#C9A84C] transition-colors line-clamp-2">
                             {property.name}
                           </h4>
-                          <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
+                          <div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
                             <MapPin className="w-3 h-3 text-[#C9A84C]" />
                             <span className="truncate">{property.location}, {property.city}</span>
                           </div>
@@ -227,7 +227,7 @@ export default function EmiCalculatorPage() {
                     </Link>
                   ))
                 ) : (
-                  <div className="text-sm text-gray-500 text-center py-4">No properties found.</div>
+                  <div className="text-sm text-muted-foreground text-center py-4">No properties found.</div>
                 )}
               </div>
 
