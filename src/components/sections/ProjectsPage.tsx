@@ -5,13 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import { useAppStore } from '@/lib/store'
 import PropertyCard from '@/components/shared/PropertyCard'
-import { PropertyCardSkeleton } from '@/components/shared/PropertyCardSkeleton'
-import CompareModal from '@/components/shared/CompareModal'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
-import { Grid3X3, List, SlidersHorizontal, X, MapPin, Home, Building2, Clock, GitCompareArrows } from 'lucide-react'
+import { Grid3X3, List, SlidersHorizontal, MapPin, Home, Building2, Clock } from 'lucide-react'
 import type { PropertyData } from '@/lib/data'
 
 const CITIES = ['All', 'Mumbai', 'Thane', 'Navi Mumbai']
@@ -28,9 +26,8 @@ export default function ProjectsPage() {
 }
 
 function ProjectsPageContent() {
-  const { compareList, clearCompare, navigate, properties } = useAppStore()
+  const { properties } = useAppStore()
   const searchParams = useSearchParams()
-  const [showCompare, setShowCompare] = useState(false)
   const [city, setCity] = useState(searchParams.get('city') || 'All')
   const [bhk, setBhk] = useState(searchParams.get('bhk') || 'All')
   const [propertyType, setPropertyType] = useState('All')
@@ -43,7 +40,6 @@ function ProjectsPageContent() {
     return [9000000, 50000000]
   })
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
-  const [showFilters, setShowFilters] = useState(false)
   const [page, setPage] = useState(1)
   const perPage = 9
 
@@ -66,8 +62,6 @@ function ProjectsPageContent() {
     if (val >= 100000) return `₹${(val / 100000).toFixed(0)} L`
     return `₹${val.toLocaleString()}`
   }
-
-  const compareProperties = compareList.map((id) => properties.find((p) => p.id === id)).filter(Boolean) as PropertyData[]
 
   return (
     <main className="min-h-screen pt-20 pb-16">
@@ -218,51 +212,6 @@ function ProjectsPageContent() {
         )}
       </div>
 
-      {/* Compare Bar */}
-      <AnimatePresence>
-        {compareList.length > 0 && (
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            className="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-md border-t border-[#C9A84C]/20 shadow-2xl"
-          >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <GitCompareArrows className="w-5 h-5 text-[#C9A84C]" />
-                  <span className="text-sm font-medium">Compare ({compareList.length}/3)</span>
-                  <div className="flex gap-2">
-                    {compareProperties.map((p) => (
-                      <Badge key={p.id} variant="secondary" className="text-xs">
-                        {p.name}
-                        <button onClick={() => useAppStore.getState().toggleCompare(p.id)} className="ml-1 cursor-pointer">
-                          <X className="w-3 h-3" />
-                        </button>
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="sm" onClick={clearCompare} className="text-xs text-muted-foreground">
-                    Clear
-                  </Button>
-                  <Button size="sm" className="btn-gold text-white text-xs" disabled={compareList.length < 2} onClick={() => setShowCompare(true)}>
-                    Compare Now
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Compare Modal */}
-      <CompareModal 
-        isOpen={showCompare} 
-        onClose={() => setShowCompare(false)} 
-        properties={compareProperties} 
-      />
     </main>
   )
 }

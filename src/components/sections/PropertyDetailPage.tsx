@@ -14,7 +14,7 @@ import { Separator } from '@/components/ui/separator'
 import {
   MapPin, Maximize, Building2, Clock, Phone, MessageCircle, Download,
   ChevronLeft, ChevronRight, Star, Shield, Layers, Home, IndianRupee,
-  Calendar, User, CheckCircle2, ArrowLeft, Waves, Dumbbell, Baby, Footprints, 
+  Calendar, User, CheckCircle2, ArrowLeft, Waves, Dumbbell, Baby, Footprints, Heart,
   Building, Zap, ShieldCheck, PhoneCall, TreePine, Gamepad2, Car, Cctv, 
   Flower2, Activity, ArrowUpDown, CloudRain, Wrench, Compass, BellRing, 
   Flame, Wifi, Hospital, GraduationCap, Landmark, Train, CreditCard, Bus, 
@@ -119,26 +119,32 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
 
         {/* Image Gallery */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="relative h-64 sm:h-80 lg:h-[480px] rounded-2xl overflow-hidden">
+          <div className="relative h-64 sm:h-80 lg:h-[480px] rounded-2xl overflow-hidden bg-black/10 dark:bg-black/40">
+            {/* Blurred background image */}
+            <div 
+              className="absolute inset-0 bg-cover bg-center blur-2xl opacity-50 scale-110" 
+              style={{ backgroundImage: `url(${Array.isArray(property.images) && property.images.length > 0 ? property.images[currentImage] : 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&h=600&fit=crop'})` }}
+            />
+            
             <img
               src={Array.isArray(property.images) && property.images.length > 0 ? property.images[currentImage] : 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&h=600&fit=crop'}
               alt={property.name}
-              className="w-full h-full object-cover"
+              className="relative w-full h-full object-contain z-10 drop-shadow-2xl"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10 pointer-events-none" />
 
             {/* Image Navigation */}
             {Array.isArray(property.images) && property.images.length > 1 && (
               <>
                 <button
                   onClick={() => setCurrentImage((p) => (p - 1 + property.images.length) % property.images.length)}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors cursor-pointer"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors cursor-pointer z-20"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
                   onClick={() => setCurrentImage((p) => (p + 1) % property.images.length)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors cursor-pointer"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors cursor-pointer z-20"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
@@ -146,10 +152,16 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
             )}
 
             {/* Badges */}
-            <div className="absolute top-4 left-4 flex gap-2">
+            <div className="absolute top-4 left-4 flex gap-2 flex-wrap max-w-[70%] z-20">
               <Badge className="bg-gradient-to-r from-[#C9A84C] to-[#B8941F] text-white border-0 px-3 py-1 text-sm font-semibold">
                 {property.priceLabel}
               </Badge>
+              {(property.transactionType === 'Sale' || !property.transactionType) && (
+                <Badge className="bg-blue-600/90 text-white border-0 px-3 py-1 text-sm font-semibold shadow-lg">For Sale</Badge>
+              )}
+              {property.transactionType === 'Rent' && (
+                <Badge className="bg-teal-600/90 text-white border-0 px-3 py-1 text-sm font-semibold shadow-lg">For Rent</Badge>
+              )}
               {property.premium && (
                 <Badge className="bg-purple-600 text-white border-0">Premium</Badge>
               )}
@@ -158,11 +170,11 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
             {/* Like Button */}
             <button
               onClick={() => toggleLike(property.id)}
-              className={`absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm cursor-pointer ${
+              className={`absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm cursor-pointer z-20 ${
                 isLiked ? 'bg-red-500 text-white' : 'bg-black/40 text-white hover:bg-red-500/80'
               }`}
             >
-              <Star className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
+              <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
             </button>
           </div>
 
@@ -231,7 +243,7 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
                   <TabsTrigger value="description">Description</TabsTrigger>
                   <TabsTrigger value="amenities">Amenities</TabsTrigger>
                   <TabsTrigger value="location">Location</TabsTrigger>
-                  <TabsTrigger value="builder">Builder</TabsTrigger>
+                  <TabsTrigger value="landmarks">Land Marks</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="description" className="mt-4">
@@ -309,22 +321,21 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
                   </div>
                 </TabsContent>
 
-                <TabsContent value="builder" className="mt-4">
-                  <div className="glass-card rounded-xl p-6 border border-[#C9A84C]/10">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#C9A84C] to-[#B8941F] flex items-center justify-center text-white font-bold text-lg">
-                        {property.builder?.charAt(0) || 'B'}
+                <TabsContent value="landmarks" className="mt-4">
+                  <div className="bg-white dark:bg-[#1a1a24] rounded-xl p-6 sm:p-8 border border-gray-100 dark:border-white/5 shadow-sm">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 border-b border-gray-100 dark:border-white/10 pb-4 inline-block border-b-2 border-b-blue-400">Land Mark</h3>
+                    {property.nearbyLandmarks && property.nearbyLandmarks.length > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
+                        {property.nearbyLandmarks.map((landmark) => (
+                          <div key={landmark} className="flex items-center gap-3">
+                            {getLandmarkIcon(landmark)}
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{landmark}</span>
+                          </div>
+                        ))}
                       </div>
-                      <div>
-                        <h4 className="font-bold text-lg">{property.builder || 'Unknown Builder'}</h4>
-                        <p className="text-sm text-muted-foreground">Developer</p>
-                      </div>
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {property.builder} is a renowned name in the Indian real estate industry, known for delivering
-                      quality projects with timely possession and world-class amenities. With a strong portfolio of
-                      residential and commercial developments, they have earned the trust of thousands of homeowners.
-                    </p>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">No landmarks specified.</p>
+                    )}
                   </div>
                 </TabsContent>
               </Tabs>

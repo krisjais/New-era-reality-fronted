@@ -31,7 +31,7 @@ import {
 interface AdminProperty {
   id: string; name: string; propertyType: string; bhk: string | null; priceLabel: string;
   city: string; location: string; status: string; views: number; likes: number; inquiries: number;
-  featured: boolean; [key: string]: unknown;
+  featured: boolean; propertyId?: string; [key: string]: unknown;
 }
 
 interface AdminLead {
@@ -405,7 +405,14 @@ function ProjectsManagement() {
           <div key={prop.id} className="bg-white dark:bg-[#13131a] shadow-sm dark:shadow-none rounded-xl p-4 border border-transparent hover:border-[#C9A84C]/20 transition-all hover:-translate-y-0.5">
             <div className="flex items-start justify-between gap-2 mb-2">
               <div className="min-w-0 flex-1">
-                <h3 className="font-semibold text-sm truncate">{prop.name}</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-sm truncate">{prop.name}</h3>
+                  {prop.propertyId && (
+                    <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-[#C9A84C]/50 text-[#C9A84C]">
+                      {prop.propertyId}
+                    </Badge>
+                  )}
+                </div>
                 <div className="flex items-center gap-1.5 mt-1">
                   <MapPin className="w-3 h-3 text-muted-foreground shrink-0" />
                   <span className="text-xs text-muted-foreground truncate">{prop.city} &bull; {prop.location}</span>
@@ -445,6 +452,7 @@ function ProjectsManagement() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Property ID</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Type</TableHead>
                   <TableHead>City</TableHead>
@@ -456,6 +464,7 @@ function ProjectsManagement() {
               <TableBody>
                 {properties.map((prop) => (
                   <TableRow key={prop.id}>
+                    <TableCell className="text-xs text-muted-foreground">{prop.propertyId || '-'}</TableCell>
                     <TableCell className="font-medium">{prop.name}</TableCell>
                     <TableCell><Badge variant="secondary" className="text-xs">{prop.propertyType}</Badge></TableCell>
                     <TableCell className="text-sm">{prop.city}</TableCell>
@@ -494,6 +503,7 @@ function ProjectsManagement() {
 function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty | null; onSave: (data: Record<string, unknown>) => void; onCancel: () => void }) {
   const [form, setForm] = useState<Record<string, string>>({
     name: property?.name || '',
+    propertyId: property?.propertyId || '',
     propertyType: property?.propertyType || 'Apartment',
     bhk: property?.bhk || '',
     priceLabel: property?.priceLabel || '',
@@ -509,6 +519,7 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     areaSqft: String(property?.areaSqft || ''),
     pricePerSqft: String(property?.pricePerSqft || ''),
     floorCount: String(property?.floorCount || ''),
+    transactionType: property?.transactionType || 'Sale',
   });
 
   const getArray = (val: unknown): string[] => {
@@ -617,13 +628,15 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     payload.nearbyLandmarks = nearbyLandmarks;
     
     if (!property?.slug) payload.slug = form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    payload.transactionType = form.transactionType;
     onSave(payload);
   };
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="space-y-2"><Label className="text-xs sm:text-sm">Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
+        <div className="space-y-2"><Label className="text-xs sm:text-sm">Property ID</Label><Input value={form.propertyId} onChange={(e) => setForm({ ...form, propertyId: e.target.value })} placeholder="e.g. PROP-001" /></div>
         <div className="space-y-2"><Label className="text-xs sm:text-sm">Type</Label>
           <Select value={form.propertyType} onValueChange={(v) => setForm({ ...form, propertyType: v })}>
             <SelectTrigger><SelectValue /></SelectTrigger>
@@ -682,7 +695,16 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
           </Select>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <div className="space-y-2"><Label className="text-xs sm:text-sm">Transaction Type</Label>
+          <Select value={form.transactionType} onValueChange={(v) => setForm({ ...form, transactionType: v })}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Sale">For Sale</SelectItem>
+              <SelectItem value="Rent">For Rent</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <div className="space-y-2"><Label className="text-xs sm:text-sm">Premium</Label>
           <Select value={form.premium} onValueChange={(v) => setForm({ ...form, premium: v })}>
             <SelectTrigger><SelectValue /></SelectTrigger>
@@ -692,6 +714,8 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
             </SelectContent>
           </Select>
         </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div className="space-y-2"><Label className="text-xs sm:text-sm">RERA Registered</Label>
           <Select value={form.reraRegistered} onValueChange={(v) => setForm({ ...form, reraRegistered: v })}>
             <SelectTrigger><SelectValue /></SelectTrigger>

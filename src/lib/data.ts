@@ -1,5 +1,6 @@
 export interface PropertyData {
   id: string
+  propertyId?: string
   slug: string
   name: string
   tagline: string

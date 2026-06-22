@@ -62,19 +62,21 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-        {/* Price Badge */}
-        <div className="absolute top-3 left-3">
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[75%]">
           <Badge className="bg-gradient-to-r from-[#C9A84C] to-[#B8941F] text-white border-0 px-3 py-1 text-xs font-semibold shadow-lg">
             {property.priceLabel}
           </Badge>
+          {(property.transactionType === 'Sale' || !property.transactionType) && (
+            <Badge className="bg-blue-600/90 text-white border-0 px-3 py-1 text-xs font-semibold shadow-lg">For Sale</Badge>
+          )}
+          {property.transactionType === 'Rent' && (
+            <Badge className="bg-teal-600/90 text-white border-0 px-3 py-1 text-xs font-semibold shadow-lg">For Rent</Badge>
+          )}
+          {property.premium && (
+            <Badge className="bg-purple-600/90 text-white border-0 px-3 py-1 text-xs font-semibold shadow-lg">Premium</Badge>
+          )}
         </div>
-
-        {/* Premium / Featured Badge */}
-        {property.premium && (
-          <div className="absolute top-3 right-12">
-            <Badge className="bg-purple-600 text-white border-0 text-xs">Premium</Badge>
-          </div>
-        )}
 
         {/* Possession Status */}
         {property.possessionStatus && (

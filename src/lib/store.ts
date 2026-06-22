@@ -48,11 +48,32 @@ export const useAppStore = create<AppState>((set) => ({
   addToRecentlyViewed: (id) => set((state) => ({
     recentlyViewed: [id, ...state.recentlyViewed.filter(r => r !== id)].slice(0, 10)
   })),
-  toggleLike: (id) => set((state) => ({
-    likedProperties: state.likedProperties.includes(id)
-      ? state.likedProperties.filter(p => p !== id)
-      : [...state.likedProperties, id]
-  })),
+  toggleLike: (id) => set((state) => {
+    const isLiked = state.likedProperties.includes(id)
+    const action = isLiked ? 'unlike' : 'like'
+    
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://new-era-reality-backend.onrender.com/api'}/properties/${id}/like`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ action })
+    }).catch(err => console.error('Failed to update like:', err))
+
+    const updatedProperties = state.properties.map(p => {
+      if (p.id === id) {
+        return { ...p, likes: Math.max(0, (p.likes || 0) + (action === 'like' ? 1 : -1)) }
+      }
+      return p
+    })
+
+    return {
+      likedProperties: isLiked
+        ? state.likedProperties.filter(p => p !== id)
+        : [...state.likedProperties, id],
+      properties: updatedProperties
+    }
+  }),
   toggleCompare: (id) => set((state) => ({
     compareList: state.compareList.includes(id)
       ? state.compareList.filter(p => p !== id)
