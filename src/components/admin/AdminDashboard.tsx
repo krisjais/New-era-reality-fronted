@@ -31,7 +31,7 @@ import {
 interface AdminProperty {
   id: string; name: string; propertyType: string; bhk: string | null; priceLabel: string;
   city: string; location: string; status: string; views: number; likes: number; inquiries: number;
-  featured: boolean; propertyId?: string; [key: string]: unknown;
+  featured: boolean; propertyId?: string; bedrooms?: number; bathrooms?: number; floorNumber?: string; [key: string]: unknown;
 }
 
 interface AdminLead {
@@ -506,6 +506,9 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     propertyId: property?.propertyId || '',
     propertyType: property?.propertyType || 'Apartment',
     bhk: property?.bhk || '',
+    bedrooms: String(property?.bedrooms || ''),
+    bathrooms: String(property?.bathrooms || ''),
+    floorNumber: String(property?.floorNumber || ''),
     priceLabel: property?.priceLabel || '',
     city: property?.city || 'Mumbai',
     location: property?.location || '',
@@ -619,6 +622,9 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     payload.areaSqft = form.areaSqft ? parseFloat(form.areaSqft) : null;
     payload.pricePerSqft = form.pricePerSqft ? parseFloat(form.pricePerSqft) : null;
     payload.floorCount = form.floorCount ? parseInt(form.floorCount, 10) : null;
+    payload.bedrooms = form.bedrooms ? parseInt(form.bedrooms, 10) : null;
+    payload.bathrooms = form.bathrooms ? parseInt(form.bathrooms, 10) : null;
+    payload.floorNumber = form.floorNumber || null;
     
     payload.images = images;
     payload.floorPlans = floorPlans;
@@ -658,6 +664,11 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
         <div className="space-y-2"><Label className="text-xs sm:text-sm">Area (Sq.Ft)</Label><Input type="number" value={form.areaSqft} onChange={(e) => setForm({ ...form, areaSqft: e.target.value })} placeholder="1200" /></div>
         <div className="space-y-2"><Label className="text-xs sm:text-sm">Price per Sq.Ft</Label><Input type="number" value={form.pricePerSqft} onChange={(e) => setForm({ ...form, pricePerSqft: e.target.value })} placeholder="15000" /></div>
         <div className="space-y-2"><Label className="text-xs sm:text-sm">Total Floors</Label><Input type="number" value={form.floorCount} onChange={(e) => setForm({ ...form, floorCount: e.target.value })} placeholder="20" /></div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div className="space-y-2"><Label className="text-xs sm:text-sm">Bedrooms</Label><Input type="number" value={form.bedrooms} onChange={(e) => setForm({ ...form, bedrooms: e.target.value })} placeholder="3" /></div>
+        <div className="space-y-2"><Label className="text-xs sm:text-sm">Bathrooms</Label><Input type="number" value={form.bathrooms} onChange={(e) => setForm({ ...form, bathrooms: e.target.value })} placeholder="2" /></div>
+        <div className="space-y-2"><Label className="text-xs sm:text-sm">Floor Number</Label><Input value={form.floorNumber} onChange={(e) => setForm({ ...form, floorNumber: e.target.value })} placeholder="e.g. Ground, 5th" /></div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div className="space-y-2"><Label className="text-xs sm:text-sm">City</Label>

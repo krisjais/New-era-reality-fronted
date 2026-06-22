@@ -27,7 +27,7 @@ export const useAppStore = create<AppState>((set) => ({
   currentPage: 'home',
   selectedPropertyId: null,
   isAdminAuthenticated: false,
-  theme: 'dark',
+  theme: 'light',
   recentlyViewed: [],
   likedProperties: [],
   compareList: [],

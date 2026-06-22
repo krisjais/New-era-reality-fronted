@@ -181,6 +181,16 @@ export default function PropertyCard({ property }: PropertyCardProps) {
               {property.bhk}
             </Badge>
           )}
+          {property.bedrooms && (
+            <Badge variant="secondary" className="text-xs">
+              {property.bedrooms} Beds
+            </Badge>
+          )}
+          {property.bathrooms && (
+            <Badge variant="secondary" className="text-xs">
+              {property.bathrooms} Baths
+            </Badge>
+          )}
           <Badge variant="secondary" className="text-xs">
             {property.propertyType}
           </Badge>

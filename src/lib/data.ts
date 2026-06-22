@@ -8,6 +8,9 @@ export interface PropertyData {
   propertyType: string
   bhk: string | null
   bhkNumber: number | null
+  bedrooms?: number | null
+  bathrooms?: number | null
+  floorNumber?: string | null
   price: number
   priceLabel: string
   pricePerSqft: number | null
@@ -153,6 +156,10 @@ export const PROPERTIES: PropertyData[] = [
     tagline: 'An Indulgence Beyond Any Experience Known So Far',
     description: 'A city breaker within the city! Hubtown Rising City is a luxury project spread over 100 acres of land with 17 towers of 28 storeys each, providing you with premium 1, 2, and 3 BHK homes. This landmark development by Hubtown Limited is designed to offer an unparalleled living experience with meticulously planned residences that feature premium finishes, spacious layouts, and panoramic views of the Mumbai skyline. The township concept ensures that every necessity and luxury is within walking distance, from world-class amenities to retail spaces and recreational facilities. Rising City is not just a home; it is a complete lifestyle destination that caters to every aspect of modern urban living.',
     propertyType: 'Apartment',
+    propertyId: 'PROP-1024',
+    bedrooms: 3,
+    bathrooms: 2,
+    floorNumber: '12th Floor',
     bhk: '1, 2, 3 BHK',
     bhkNumber: 3,
     price: 30800000,

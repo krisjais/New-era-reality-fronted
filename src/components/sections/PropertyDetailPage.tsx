@@ -18,7 +18,7 @@ import {
   Building, Zap, ShieldCheck, PhoneCall, TreePine, Gamepad2, Car, Cctv, 
   Flower2, Activity, ArrowUpDown, CloudRain, Wrench, Compass, BellRing, 
   Flame, Wifi, Hospital, GraduationCap, Landmark, Train, CreditCard, Bus, 
-  Plane, ShoppingBag, Check, Trash2
+  Plane, ShoppingBag, Check, Trash2, Hash
 } from 'lucide-react'
 
 interface PropertyDetailPageProps {
@@ -223,11 +223,15 @@ export default function PropertyDetailPage({ propertyId }: PropertyDetailPagePro
               className="grid grid-cols-2 sm:grid-cols-4 gap-4"
             >
               {[
-                { icon: Home, label: 'BHK', value: property.bhk || 'N/A' },
-                { icon: Maximize, label: 'Area', value: property.areaSqft ? `${property.areaSqft} sq ft` : 'N/A' },
-                { icon: Layers, label: 'Floors', value: property.floorCount ? `${property.floorCount}` : 'N/A' },
-                { icon: Clock, label: 'Possession', value: property.possessionStatus || 'N/A' },
-              ].map((item) => (
+                { icon: Hash, label: 'Property ID', value: property.propertyId, show: !!property.propertyId },
+                { icon: Home, label: 'BHK', value: property.bhk || 'N/A', show: true },
+                { icon: Home, label: 'Bedrooms', value: property.bedrooms, show: !!property.bedrooms },
+                { icon: Waves, label: 'Bathrooms', value: property.bathrooms, show: !!property.bathrooms },
+                { icon: Maximize, label: 'Area', value: property.areaSqft ? `${property.areaSqft} sq ft` : 'N/A', show: true },
+                { icon: Layers, label: 'Floor Level', value: property.floorNumber, show: !!property.floorNumber },
+                { icon: Layers, label: 'Total Floors', value: property.floorCount ? `${property.floorCount}` : 'N/A', show: true },
+                { icon: Clock, label: 'Possession', value: property.possessionStatus || 'N/A', show: true },
+              ].filter(item => item.show).map((item) => (
                 <div key={item.label} className="glass-card rounded-xl p-4 text-center border border-[#C9A84C]/10">
                   <item.icon className="w-5 h-5 text-[#C9A84C] mx-auto mb-2" />
                   <p className="text-xs text-muted-foreground">{item.label}</p>
