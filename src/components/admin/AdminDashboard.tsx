@@ -365,17 +365,25 @@ function ProjectsManagement() {
     try {
       if (isNew) {
         const res = await fetch(`${APP_CONFIG.API_URL}/properties`, { method: 'POST', headers: authHeaders(), body: JSON.stringify(data) })
-        if (!res.ok) throw new Error('Failed')
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || errorData.message || 'Failed to create property')
+        }
         toast.success('Property created')
       } else if (editProp) {
         const res = await fetch(`${APP_CONFIG.API_URL}/properties/${editProp.id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify(data) })
-        if (!res.ok) throw new Error('Failed')
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || errorData.message || 'Failed to update property')
+        }
         toast.success('Property updated')
       }
       setIsOpen(false)
       setEditProp(null)
       fetchProperties()
-    } catch { toast.error('Failed to save') }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to save')
+    }
   }
 
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin text-[#C9A84C]" /></div>
@@ -569,10 +577,11 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
         const data = await res.json();
         setUrls(prev => [...prev, ...data.urls]);
       } else {
-        toast.error('Upload failed');
+        const errorData = await res.json().catch(() => ({}));
+        toast.error(errorData.error || errorData.message || 'Upload failed');
       }
-    } catch {
-      toast.error('Upload failed');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Upload failed');
     } finally {
       setLoading(false);
     }
