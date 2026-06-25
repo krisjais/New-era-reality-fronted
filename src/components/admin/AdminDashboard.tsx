@@ -525,12 +525,12 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     price: String(property?.price || '0'),
     featured: property?.featured ? 'true' : 'false',
     premium: property?.premium ? 'true' : 'false',
-    possessionStatus: property?.possessionStatus || 'Ready to Move',
+    possessionStatus: (property?.possessionStatus as string) || 'Ready to Move',
     reraRegistered: property?.reraRegistered ? 'true' : 'false',
     areaSqft: String(property?.areaSqft || ''),
     pricePerSqft: String(property?.pricePerSqft || ''),
     floorCount: String(property?.floorCount || ''),
-    transactionType: property?.transactionType || 'Sale',
+    transactionType: (property?.transactionType as string) || 'Sale',
   });
 
   const getArray = (val: unknown): string[] => {
@@ -647,6 +647,104 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
     onSave(payload);
   };
 
+  const getPricePreview = (priceLabelStr: string) => {
+    if (!priceLabelStr) return null;
+
+    const parts = priceLabelStr.split(/[-–—]|to/i).map(p => p.trim()).filter(Boolean);
+    if (parts.length === 0) return null;
+
+    const parsedParts = parts.map(part => {
+      const numMatch = part.match(/[\d.]+/);
+      if (!numMatch) return null;
+      const val = parseFloat(numMatch[0]);
+      if (isNaN(val)) return null;
+
+      const lowerPart = part.toLowerCase();
+      const lowerFull = priceLabelStr.toLowerCase();
+      
+      let parsedPrice = val;
+      let unit = '';
+      
+      if (lowerPart.includes('cr') || lowerPart.includes('crore')) {
+        parsedPrice = val * 10000000;
+        unit = 'Cr';
+      } else if (lowerPart.includes('l') || lowerPart.includes('lac') || lowerPart.includes('lakh')) {
+        parsedPrice = val * 100000;
+        unit = 'L';
+      } else if (lowerPart.includes('k')) {
+        parsedPrice = val * 1000;
+        unit = 'K';
+      } else if (lowerFull.includes('cr') || lowerFull.includes('crore')) {
+        parsedPrice = val * 10000000;
+        unit = 'Cr';
+      } else if (lowerFull.includes('l') || lowerFull.includes('lac') || lowerFull.includes('lakh')) {
+        parsedPrice = val * 100000;
+        unit = 'L';
+      } else if (lowerFull.includes('k')) {
+        parsedPrice = val * 1000;
+        unit = 'K';
+      }
+
+      return { val, parsedPrice, unit };
+    }).filter(Boolean) as { val: number; parsedPrice: number; unit: string }[];
+
+    if (parsedParts.length === 0) return null;
+
+    const formatWord = (price: number) => {
+      if (price >= 10000000) {
+        return `${(price / 10000000).toFixed(2).replace(/\.00$/, '')} Crore`;
+      } else if (price >= 100000) {
+        return `${(price / 100000).toFixed(2).replace(/\.00$/, '')} Lakh`;
+      } else if (price >= 1000) {
+        return `${(price / 1000).toFixed(2).replace(/\.00$/, '')} Thousand`;
+      } else {
+        return `${price} Rupees`;
+      }
+    };
+
+    const formatNumber = (price: number) => {
+      return price.toLocaleString('en-IN');
+    };
+
+    const hasAnyUnit = /cr|crore|l\b|lac|lakh|k\b/i.test(priceLabelStr);
+    if (!hasAnyUnit) {
+      const firstVal = parsedParts[0].val;
+      if (firstVal < 1000) {
+        return (
+          <div className="text-xs text-amber-500 mt-1 space-y-1">
+            <p className="font-semibold">Format hint:</p>
+            <ul className="list-disc pl-4 space-y-0.5">
+              <li>For {firstVal} Lakhs: type <code className="bg-amber-500/10 px-1 py-0.5 rounded font-mono text-[10px]">{firstVal} L</code> or <code className="bg-amber-500/10 px-1 py-0.5 rounded font-mono text-[10px]">{firstVal} Lakh</code></li>
+              <li>For {firstVal} Crores: type <code className="bg-amber-500/10 px-1 py-0.5 rounded font-mono text-[10px]">{firstVal} Cr</code> or <code className="bg-amber-500/10 px-1 py-0.5 rounded font-mono text-[10px]">{firstVal} Crore</code></li>
+            </ul>
+          </div>
+        );
+      }
+    }
+
+    if (parsedParts.length === 1) {
+      const { parsedPrice } = parsedParts[0];
+      return (
+        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1.5 bg-gray-50 dark:bg-[#1a1a24]/30 px-2 py-1 rounded border border-gray-100 dark:border-white/5">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#C9A84C]"></span>
+          <span>Detected: <strong className="text-[#C9A84C] font-semibold">{formatWord(parsedPrice)}</strong> {parsedPrice >= 1000 ? `(₹${formatNumber(parsedPrice)})` : ''}</span>
+        </div>
+      );
+    } else {
+      const wordRange = parsedParts.map(p => formatWord(p.parsedPrice)).join(' - ');
+      const numRange = parsedParts.map(p => `₹${formatNumber(p.parsedPrice)}`).join(' - ');
+      return (
+        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-start gap-1.5 bg-gray-50 dark:bg-[#1a1a24]/30 px-2 py-1 rounded border border-gray-100 dark:border-white/5">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#C9A84C] mt-1.5 shrink-0"></span>
+          <div>
+            <div>Detected Range: <strong className="text-[#C9A84C] font-semibold">{wordRange}</strong></div>
+            <div className="text-[10px] text-muted-foreground">({numRange})</div>
+          </div>
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
@@ -666,7 +764,11 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-        <div className="space-y-2"><Label className="text-xs sm:text-sm">Price Label</Label><Input value={form.priceLabel} onChange={(e) => setForm({ ...form, priceLabel: e.target.value })} placeholder="₹1.5 Cr" /></div>
+        <div className="space-y-2">
+          <Label className="text-xs sm:text-sm">Price Label</Label>
+          <Input value={form.priceLabel} onChange={(e) => setForm({ ...form, priceLabel: e.target.value })} placeholder="₹1.5 Cr" />
+          {getPricePreview(form.priceLabel)}
+        </div>
         <div className="space-y-2"><Label className="text-xs sm:text-sm">BHK</Label><Input value={form.bhk} onChange={(e) => setForm({ ...form, bhk: e.target.value })} placeholder="2 BHK" /></div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
