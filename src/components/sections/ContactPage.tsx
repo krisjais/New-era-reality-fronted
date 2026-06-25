@@ -11,9 +11,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { MapPin, Phone, Mail, Clock, MessageCircle, Send, Building2 } from 'lucide-react'
+import { useAppStore } from '@/lib/store'
 
 export default function ContactPage() {
   const [loading, setLoading] = useState(false)
+  const { properties } = useAppStore()
   const [form, setForm] = useState({
     name: '', email: '', phone: '', message: '', propertyInterest: '',
   })
@@ -22,6 +24,10 @@ export default function ContactPage() {
     e.preventDefault()
     if (!form.name.trim() || !form.phone.trim()) {
       toast.error('Please fill in name and phone number')
+      return
+    }
+    if (!/^\d{10}$/.test(form.phone.replace(/\D/g, ''))) {
+      toast.error('Please enter a valid 10-digit phone number')
       return
     }
     setLoading(true)
@@ -36,12 +42,50 @@ export default function ContactPage() {
           message: form.message || null,
           leadType: 'inquiry',
           source: 'contact_form',
-          propertyId: form.propertyInterest || null,
+          propertyId: form.propertyInterest && form.propertyInterest !== 'none' ? form.propertyInterest : null,
         }),
       })
       if (!res.ok) throw new Error('Failed')
-      toast.success('Thank you! We will contact you shortly.')
+
+      toast.success('Your inquiry has been saved. Redirecting to WhatsApp...')
+
+      const targetPropertyId = form.propertyInterest && form.propertyInterest !== 'none' ? form.propertyInterest : null
+      const property = targetPropertyId ? properties.find((p) => p.id === targetPropertyId) : null
+
+      const propertyName = property?.name || 'N/A'
+      const budget = property?.priceLabel || 'N/A'
+
+      const waMessage = `Hello New Era Reality,
+
+I would like to inquire about this property.
+
+Property Name:
+${propertyName}
+
+Customer Name:
+${form.name}
+
+Phone Number:
+${form.phone}
+
+Email:
+${form.email || 'N/A'}
+
+Budget:
+${budget}
+
+Message:
+${form.message || 'N/A'}
+
+Please contact me regarding this property.
+
+Thank you.`
+
+      const waUrl = `https://wa.me/919076259009?text=${encodeURIComponent(waMessage)}`
+
       setForm({ name: '', email: '', phone: '', message: '', propertyInterest: '' })
+
+      window.location.href = waUrl
     } catch {
       toast.error('Something went wrong. Please try again.')
     } finally {

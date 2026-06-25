@@ -31,7 +31,7 @@ import {
 interface AdminProperty {
   id: string; name: string; propertyType: string; bhk: string | null; priceLabel: string;
   city: string; location: string; status: string; views: number; likes: number; inquiries: number;
-  featured: boolean; propertyId?: string; bedrooms?: number; bathrooms?: number; floorNumber?: string; [key: string]: unknown;
+  featured: boolean; bedrooms?: number; bathrooms?: number; floorNumber?: string; [key: string]: unknown;
 }
 
 interface AdminLead {
@@ -415,11 +415,6 @@ function ProjectsManagement() {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="font-semibold text-sm truncate">{prop.name}</h3>
-                  {prop.propertyId && (
-                    <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-[#C9A84C]/50 text-[#C9A84C]">
-                      {prop.propertyId}
-                    </Badge>
-                  )}
                 </div>
                 <div className="flex items-center gap-1.5 mt-1">
                   <MapPin className="w-3 h-3 text-muted-foreground shrink-0" />
@@ -460,7 +455,6 @@ function ProjectsManagement() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Property ID</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Type</TableHead>
                   <TableHead>City</TableHead>
@@ -472,7 +466,6 @@ function ProjectsManagement() {
               <TableBody>
                 {properties.map((prop) => (
                   <TableRow key={prop.id}>
-                    <TableCell className="text-xs text-muted-foreground">{prop.propertyId || '-'}</TableCell>
                     <TableCell className="font-medium">{prop.name}</TableCell>
                     <TableCell><Badge variant="secondary" className="text-xs">{prop.propertyType}</Badge></TableCell>
                     <TableCell className="text-sm">{prop.city}</TableCell>
@@ -511,7 +504,6 @@ function ProjectsManagement() {
 function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty | null; onSave: (data: Record<string, unknown>) => void; onCancel: () => void }) {
   const [form, setForm] = useState<Record<string, string>>({
     name: property?.name || '',
-    propertyId: property?.propertyId || '',
     propertyType: property?.propertyType || 'Apartment',
     bhk: property?.bhk || '',
     bedrooms: String(property?.bedrooms || ''),
@@ -747,9 +739,8 @@ function PropertyForm({ property, onSave, onCancel }: { property: AdminProperty 
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div className="space-y-2"><Label className="text-xs sm:text-sm">Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-        <div className="space-y-2"><Label className="text-xs sm:text-sm">Property ID</Label><Input value={form.propertyId} onChange={(e) => setForm({ ...form, propertyId: e.target.value })} placeholder="e.g. PROP-001" /></div>
         <div className="space-y-2"><Label className="text-xs sm:text-sm">Type</Label>
           <Select value={form.propertyType} onValueChange={(v) => setForm({ ...form, propertyType: v })}>
             <SelectTrigger><SelectValue /></SelectTrigger>

@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { Send, Loader2 } from 'lucide-react'
+import { useAppStore } from '@/lib/store'
 
 interface LeadFormProps {
   propertyId?: string | null
@@ -20,6 +21,9 @@ interface LeadFormProps {
 
 export default function LeadForm({ propertyId, defaultLeadType, source = 'homepage', onSuccess, compact }: LeadFormProps) {
   const [loading, setLoading] = useState(false)
+  const { properties } = useAppStore()
+  const property = properties.find((p) => p.id === propertyId)
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -51,9 +55,44 @@ export default function LeadForm({ propertyId, defaultLeadType, source = 'homepa
         }),
       })
       if (!res.ok) throw new Error('Failed to submit')
-      toast.success('Thank you! We will get back to you shortly.')
+
+      toast.success('Your inquiry has been saved. Redirecting to WhatsApp...')
+
+      const propertyName = property?.name || 'N/A'
+      const budget = property?.priceLabel || 'N/A'
+
+      const waMessage = `Hello New Era Reality,
+
+I would like to inquire about this property.
+
+Property Name:
+${propertyName}
+
+Customer Name:
+${formData.name}
+
+Phone Number:
+${formData.phone}
+
+Email:
+${formData.email || 'N/A'}
+
+Budget:
+${budget}
+
+Message:
+${formData.message || 'N/A'}
+
+Please contact me regarding this property.
+
+Thank you.`
+
+      const waUrl = `https://wa.me/919076259009?text=${encodeURIComponent(waMessage)}`
+
       setFormData({ name: '', phone: '', email: '', leadType: defaultLeadType || 'inquiry', message: '' })
       onSuccess?.()
+
+      window.location.href = waUrl
     } catch {
       toast.error('Something went wrong. Please try again.')
     } finally {
